@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Claude
+.claude/
+
+# Logs
+*.log
+
+# Data files (if large)
+data/*.pkl
+data/*.pt
+data/*.pth
+data/*.bin
+
+# Model checkpoints
+*.ckpt
+*.safetensors
+checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

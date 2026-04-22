@@ -1,0 +1,77 @@
+# MMSearch-R1 GRPO Training Config — AutoDL H20 96GB, Single GPU
+# Launch: python train/grpo_trainer.py --config train/configs/h20_lora.yaml
+
+model:
+  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  trust_remote_code: true
+
+  # LoRA — fits comfortably in ~55 GB, leaving room for KV cache + activations
+  use_lora: true
+  lora_rank: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+dataset:
+  train_files: lmms-lab/FactualVQA  # HF dataset id
+  cache_dir: /root/autodl-tmp/datasets/factualvqa
+  max_samples: null  # set e.g. 1000 for debugging
+
+trainer:
+  total_epochs: 3
+  project_name: mmsearch-r1-grpo
+  experiment_name: h20-lora-r64
+  logger: ["console", "tensorboard"]
+  log_dir: /root/autodl-tmp/logs/mmsearch-r1
+
+  # GRPO / PPO settings
+  n_gpus_per_node: 1
+  nnodes: 1
+  train_batch_size: 64        # number of prompts per update step
+  ppo_mini_batch_size: 16     # micro-batch size for gradient accumulation
+  ppo_epochs: 1               # GRPO uses 1 epoch per rollout batch
+  kl_coef: 0.001              # KL regularization weight
+  clip_ratio: 0.2             # PPO clip epsilon
+  entropy_coef: 0.0
+
+  # Group-relative advantage: sample G responses per prompt
+  rollout_n: 8                # G = 8 responses per prompt
+  rollout_temperature: 0.9
+  rollout_top_p: 0.95
+
+  max_response_length: 2048
+  response_length_total: 8192  # max context including tools
+
+  # Gradient
+  learning_rate: 1.0e-5
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  warmup_steps: 20
+
+  save_freq: 200             # save checkpoint every N steps
+  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1
+
+rollout:
+  rollout_backend: vllm
+  rollout_name: vllm_multiturn_mmsearch
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.5  # leave ~50% for training
+  enforce_eager: false
+
+  # Tool limits (per rollout episode)
+  image_search_limit: 1
+  text_search_limit: 2
+  max_gen_round: 3
+
+reward:
+  search_penalty: 0.1
+  format_penalty: 0.1
+  use_substring_match: true

@@ -1,0 +1,22 @@
+{
+  "sessions": {
+    "6963f7eb-d13b-4dea-be0a-057bce4bfdf2": {
+      "user_message_count": 28,
+      "agent_message_count": 231,
+      "start_timestamp": "2026-04-21T12:46:58.213Z",
+      "end_timestamp": "2026-04-21T15:36:18.045Z",
+      "markdown_size_bytes": 553281,
+      "provider": "claude-code",
+      "last_updated": "2026-04-21T15:36:18Z"
+    },
+    "7c4f26b6-c312-4723-9c89-9e432e855603": {
+      "user_message_count": 7,
+      "agent_message_count": 20,
+      "start_timestamp": "2026-04-22T01:58:09.329Z",
+      "end_timestamp": "2026-04-22T02:40:26.375Z",
+      "markdown_size_bytes": 21203,
+      "provider": "claude-code",
+      "last_updated": "2026-04-22T02:40:26Z"
+    }
+  }
+}
