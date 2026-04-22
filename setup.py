@@ -1,0 +1,30 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="mmsearch-agent",
+    version="0.1.0",
+    description="Multimodal Web Search with GRPO",
+    author="telanan",
+    packages=find_packages(),
+    python_requires=">=3.10",
+    install_requires=[
+        "torch>=2.3.0",
+        "torchvision",
+        "transformers>=4.46.0",
+        "accelerate>=0.33.0",
+        "peft>=0.12.0",
+        "vllm>=0.6.0",
+        "Pillow>=10.0.0",
+        "qwen-vl-utils",
+        "requests>=2.31.0",
+        "openai>=1.40.0",
+        "datasets>=2.20.0",
+        "huggingface_hub>=0.23.0",
+        "streamlit>=1.36.0",
+        "gradio>=4.40.0",
+        "numpy>=1.26.0",
+        "tqdm>=4.66.0",
+        "python-dotenv>=1.0.0",
+        "pydantic>=2.0.0",
+    ],
+)
