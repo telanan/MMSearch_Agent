@@ -1,0 +1,80 @@
+# MMSearch-R1 GRPO Training with Quality-Aware Reward
+# Fine-tuning MMSearch-R1-7B with improved reward function
+# Launch: python train/grpo_trainer.py --config train/configs/quality_reward.yaml
+
+model:
+  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  trust_remote_code: true
+
+  # LoRA for efficient fine-tuning
+  use_lora: true
+  lora_rank: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+dataset:
+  train_files: lmms-lab/FactualVQA
+  cache_dir: /root/autodl-tmp/datasets/factualvqa
+  max_samples: null  # Use full dataset
+
+trainer:
+  total_epochs: 2  # Shorter since we're fine-tuning
+  project_name: mmsearch-r1-quality
+  experiment_name: quality-aware-reward
+  logger: ["console", "tensorboard"]
+  log_dir: /root/autodl-tmp/logs/mmsearch-r1-quality
+
+  # GRPO / PPO settings
+  n_gpus_per_node: 1
+  nnodes: 1
+  train_batch_size: 64
+  ppo_mini_batch_size: 16
+  ppo_epochs: 1
+  kl_coef: 0.001
+  clip_ratio: 0.2
+  entropy_coef: 0.0
+
+  # Group-relative advantage
+  rollout_n: 8
+  rollout_temperature: 0.9
+  rollout_top_p: 0.95
+
+  max_response_length: 2048
+  response_length_total: 8192
+
+  # Gradient
+  learning_rate: 5.0e-6  # Lower LR for fine-tuning
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  warmup_steps: 10
+
+  save_freq: 200
+  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1-quality
+
+rollout:
+  rollout_backend: vllm
+  rollout_name: vllm_multiturn_mmsearch
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.5
+  enforce_eager: false
+
+  # Tool limits
+  image_search_limit: 1
+  text_search_limit: 2
+  max_gen_round: 3
+
+reward:
+  # Use quality-aware reward function
+  reward_type: quality_aware  # NEW: specify reward type
+  base_penalty: 0.1
+  format_penalty: 0.1
+  use_substring_match: true

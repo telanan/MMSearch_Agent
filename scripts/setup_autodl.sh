@@ -24,6 +24,9 @@ if ! python -c "import verl" 2>/dev/null; then
     pip install -i https://pypi.tuna.tsinghua.edu.cn/simple verl --root-user-action=ignore
 fi
 
+echo "=== Installing spaCy language model ==="
+python -m spacy download en_core_web_sm
+
 echo "=== Installing project in editable mode ==="
 pip install -e "$PROJ_DIR" --root-user-action=ignore
 

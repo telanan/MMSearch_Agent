@@ -38,25 +38,37 @@ except ImportError:
     print("  pip install verl  OR  pip install -e git+https://github.com/volcengine/verl.git")
 
 from data.factualvqa import compute_reward, load_factualvqa
+from data.quality_reward import compute_quality_aware_reward
 
 
 # ─── Reward function ─────────────────────────────────────────────────────────
 
-def mmsearch_reward_fn(data: "DataProto", tokenizer) -> torch.Tensor:
+def mmsearch_reward_fn(data: "DataProto", tokenizer, use_quality_reward: bool = False) -> torch.Tensor:
     """
     Reward function compatible with veRL's DataProto interface.
 
     Decodes responses, computes EM/SubEM + penalties, returns per-sample reward tensor.
     Reward is sparse: assigned only at the last non-padding token.
+
+    Args:
+        use_quality_reward: If True, use quality-aware reward function
     """
     responses = data.batch["responses"]          # (B, seq_len) token ids
     gold_answers_list = data.non_tensor_batch["gold_answers"]  # list of list[str]
+    questions_list = data.non_tensor_batch.get("questions", [""] * len(gold_answers_list))
 
     rewards = torch.zeros(responses.shape[0], responses.shape[1], dtype=torch.float32)
 
-    for i, (resp_ids, gold_answers) in enumerate(zip(responses, gold_answers_list)):
+    for i, (resp_ids, gold_answers, question) in enumerate(zip(responses, gold_answers_list, questions_list)):
         resp_text = tokenizer.decode(resp_ids, skip_special_tokens=True)
-        result = compute_reward(resp_text, gold_answers, use_substring_match=True)
+
+        # Choose reward function
+        if use_quality_reward:
+            result = compute_quality_aware_reward(
+                resp_text, gold_answers, question=question, use_substring_match=True
+            )
+        else:
+            result = compute_reward(resp_text, gold_answers, use_substring_match=True)
 
         # Find last real token (non-padding)
         pad_id = tokenizer.pad_token_id or 0
@@ -105,7 +117,15 @@ def train(config_path: str):
     # Reward manager
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(cfg.model.model_path, trust_remote_code=True)
-    reward_fn = partial(mmsearch_reward_fn, tokenizer=tokenizer)
+
+    # Check if using quality-aware reward
+    use_quality_reward = cfg.get("reward", {}).get("reward_type") == "quality_aware"
+    if use_quality_reward:
+        print("[INFO] Using quality-aware reward function")
+    else:
+        print("[INFO] Using standard reward function")
+
+    reward_fn = partial(mmsearch_reward_fn, tokenizer=tokenizer, use_quality_reward=use_quality_reward)
 
     # Launch trainer
     trainer = RayPPOTrainer(

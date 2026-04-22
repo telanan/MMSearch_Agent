@@ -6,21 +6,62 @@
 
 本项目是对 MMSearch-R1 的复现，使用 GRPO（Group Relative Policy Optimization）训练多模态模型学习自主搜索策略。
 
-## 两种训练模式
+## 核心优化：质量感知奖励函数 ⭐
 
-### 1. 继续训练（推荐用于优化）⭐
-基于已训练好的 MMSearch-R1-7B 进行微调，适合：
-- 中文数据适配
-- 领域迁移（医疗、电商等）
-- 搜索策略优化
+原项目的奖励函数只考虑"搜索次数"，不区分搜索质量：
+```python
+# 原始奖励函数
+reward = answer_reward - 0.1 × 搜索次数 - format_penalty
+```
+
+**问题：**
+- 搜索 "Mona Lisa painter"（精确）= -0.1
+- 搜索 "painting"（太宽泛）= -0.1
+- 惩罚相同，无法学习生成高质量搜索词
+
+**改进的质量感知奖励函数：**
+```python
+# 质量感知奖励函数
+reward = answer_reward - quality_adjusted_penalty - format_penalty
+
+quality_adjusted_penalty = Σ (base_penalty / query_quality)
+```
+
+**质量评分考虑：**
+1. **实体覆盖率**：搜索词是否包含问题/答案中的关键实体
+2. **特异性**：是否避免过于宽泛的词（"what", "thing", "image"）
+3. **长度适当性**：3-10 词为佳
+
+**效果：**
+- 高质量搜索（quality=1.0）→ penalty = 0.1
+- 低质量搜索（quality=0.5）→ penalty = 0.2
+- 鼓励模型生成更精确的搜索词
+
+## 三种训练模式
+
+### 1. 质量感知奖励训练（本项目核心优化）⭐⭐⭐
+基于 MMSearch-R1-7B 使用改进的奖励函数继续训练：
 
 ```bash
-# 使用默认配置（MMSearch-R1-7B）
+# 使用质量感知奖励函数
+bash scripts/train.sh train/configs/quality_reward.yaml
+```
+
+**对比实验：**
+```bash
+# 评估原模型 vs 优化后模型
+bash scripts/compare_rewards.sh
+```
+
+### 2. 标准继续训练
+基于 MMSearch-R1-7B 进行微调（原始奖励函数）：
+
+```bash
 bash scripts/train.sh train/configs/h20_lora.yaml
 ```
 
-### 2. 从头训练（完整复现）
-从 Qwen2.5-VL-7B 基础模型开始训练，完整复现论文：
+### 3. 从头训练（完整复现）
+从 Qwen2.5-VL-7B 基础模型开始训练：
 
 ```bash
 # 需要先下载 Qwen2.5-VL-7B（取消 setup_autodl.sh 中的注释）
@@ -93,22 +134,34 @@ bash scripts/train.sh
 ```
 ├── search_tools/          # 搜索工具（图像搜索、文本搜索）
 ├── inference/             # 推理引擎
-├── data/                  # 数据集加载和奖励计算
-├── train/                 # GRPO 训练
-│   ├── configs/
-│   │   ├── h20_lora.yaml      # 继续训练配置（MMSearch-R1-7B）
-│   │   └── qwen_base.yaml     # 从头训练配置（Qwen2.5-VL-7B）
-├── scripts/               # 安装和训练脚本
+├── data/
+│   ├── factualvqa.py      # 原始奖励函数
+│   └── quality_reward.py  # 质量感知奖励函数（新增）
+├── train/
+│   ├── grpo_trainer.py    # GRPO 训练（支持两种奖励函数）
+│   └── configs/
+│       ├── quality_reward.yaml  # 质量感知训练配置（推荐）
+│       ├── h20_lora.yaml        # 标准继续训练配置
+│       └── qwen_base.yaml       # 从头训练配置
+├── scripts/
+│   ├── setup_autodl.sh          # 环境安装
+│   ├── train.sh                 # 训练脚本
+│   └── compare_rewards.sh       # 对比实验脚本（新增）
 └── app.py                 # Streamlit 演示界面
 ```
 
-## 优化方向
+## 实验结果（预期）
 
-- [ ] 中文数据适配
-- [ ] 搜索质量分析
-- [ ] 多源搜索融合
-- [ ] 领域迁移应用
-- [ ] 可视化分析工具
+基于质量感知奖励函数的改进预期效果：
+
+| 指标 | 原模型 | 优化后 | 提升 |
+|------|--------|--------|------|
+| 搜索词质量评分 | 0.65 | 0.82 | +26% |
+| 高质量搜索占比 | 45% | 68% | +23pp |
+| 最终准确率 | 72% | 78% | +6pp |
+| 平均搜索次数 | 1.8 | 1.6 | -11% |
+
+*注：以上为预期数据，实际结果需训练后验证*
 
 ## 技术栈
 
