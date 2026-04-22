@@ -13,8 +13,8 @@ mkdir -p "$MODEL_DIR" "$DATASET_DIR/factualvqa" "$TMP_DIR/logs" "$TMP_DIR/checkp
 
 echo "=== Installing Python dependencies ==="
 pip install --upgrade pip --root-user-action=ignore
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124 --root-user-action=ignore
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple transformers>=4.46.0 accelerate peft datasets huggingface_hub --root-user-action=ignore
+# Skip torch/torchvision if already installed by the image
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple "transformers>=4.46.0,<5.0.0" accelerate peft datasets huggingface_hub --root-user-action=ignore
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple vllm>=0.6.0 --root-user-action=ignore
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple qwen-vl-utils Pillow requests openai --root-user-action=ignore
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple streamlit python-dotenv pydantic tqdm omegaconf --root-user-action=ignore

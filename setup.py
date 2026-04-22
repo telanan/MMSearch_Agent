@@ -10,7 +10,7 @@ setup(
     install_requires=[
         "torch>=2.3.0",
         "torchvision",
-        "transformers>=4.46.0",
+        "transformers>=4.46.0,<5.0.0",
         "accelerate>=0.33.0",
         "peft>=0.12.0",
         "vllm>=0.6.0",
@@ -26,5 +26,6 @@ setup(
         "tqdm>=4.66.0",
         "python-dotenv>=1.0.0",
         "pydantic>=2.0.0",
+        "spacy>=3.7.0",
     ],
 )
