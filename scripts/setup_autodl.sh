@@ -3,19 +3,13 @@
 # Run once after creating the instance: bash scripts/setup_autodl.sh
 set -euo pipefail
 
-PROJ_DIR="/root/hybrid-rag"
+PROJ_DIR="/root/autodl-tmp/MMSearch_Agent"
 TMP_DIR="/root/autodl-tmp"
 MODEL_DIR="$TMP_DIR/models"
 DATASET_DIR="$TMP_DIR/datasets"
 
 echo "=== Creating directories ==="
 mkdir -p "$MODEL_DIR" "$DATASET_DIR/factualvqa" "$TMP_DIR/logs" "$TMP_DIR/checkpoints"
-
-echo "=== Cloning multimodal-search-r1 ==="
-cd "$PROJ_DIR"
-if [ ! -d "multimodal-search-r1" ]; then
-    git clone https://github.com/EvolvingLMMs-Lab/multimodal-search-r1.git
-fi
 
 echo "=== Installing Python dependencies ==="
 pip install -q --upgrade pip
@@ -31,7 +25,7 @@ if ! python -c "import verl" 2>/dev/null; then
 fi
 
 echo "=== Installing project in editable mode ==="
-pip install -q -e "$PROJ_DIR/mmsearch-r1"
+pip install -q -e "$PROJ_DIR"
 
 echo "=== Downloading MMSearch-R1-7B weights ==="
 python - <<'EOF'

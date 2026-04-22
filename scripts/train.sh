@@ -4,7 +4,7 @@
 set -euo pipefail
 
 CONFIG="${1:-train/configs/h20_lora.yaml}"
-PROJ_DIR="/root/hybrid-rag/mmsearch-r1"
+PROJ_DIR="/root/autodl-tmp/MMSearch_Agent"
 
 # Load API keys
 if [ -f "$PROJ_DIR/.env" ]; then
