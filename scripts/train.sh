@@ -24,7 +24,7 @@ cd "$PROJ_DIR"
 ray stop --force 2>/dev/null || true
 ray start --head --num-gpus=1 --num-cpus=8 --object-store-memory=10000000000
 
-PYTHONPATH="$PROJ_DIR:$PYTHONPATH" \
+PYTHONPATH="$PROJ_DIR:${PYTHONPATH:-}" \
 CUDA_VISIBLE_DEVICES=0 \
 python train/grpo_trainer.py --config "$CONFIG" 2>&1 | tee /root/autodl-tmp/logs/train_$(date +%Y%m%d_%H%M%S).log
 
