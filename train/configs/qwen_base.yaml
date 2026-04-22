@@ -1,9 +1,10 @@
-# MMSearch-R1 GRPO Training Config — AutoDL H20 96GB, Single GPU
-# Launch: python train/grpo_trainer.py --config train/configs/h20_lora.yaml
+# Training from scratch using Qwen2.5-VL-7B base model
+# Use this config if you want to fully reproduce the original paper
+# Launch: python train/grpo_trainer.py --config train/configs/qwen_base.yaml
 
 model:
-  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
-  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  model_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
+  tokenizer_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
   trust_remote_code: true
 
   # LoRA — fits comfortably in ~55 GB, leaving room for KV cache + activations
@@ -28,7 +29,7 @@ dataset:
 trainer:
   total_epochs: 3
   project_name: mmsearch-r1-grpo
-  experiment_name: h20-lora-r64
+  experiment_name: qwen-base-scratch
   logger: ["console", "tensorboard"]
   log_dir: /root/autodl-tmp/logs/mmsearch-r1
 
@@ -57,7 +58,7 @@ trainer:
   warmup_steps: 20
 
   save_freq: 200             # save checkpoint every N steps
-  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1
+  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1-scratch
 
 rollout:
   rollout_backend: vllm

@@ -747,11 +747,2725 @@ Initialized empty Git repository in /Users/surely/Downloads/mmsearch-r1/.git/
 ```
 </details></tool-use>
 
-_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:40:26Z)**_
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:40:28Z)**_
 
 <tool-use data-tool-type="shell" data-tool-name="Bash"><details>
 <summary>Tool use: **Bash**</summary>
 Stage all files
 
 `git add .`
+
+```text
+(Bash completed with no output)
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:40:33Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Create initial commit
+
+`git commit -m "Initial commit: MMSearch-R1 multimodal search with GRPO"`
+
+```text
+[main (root-commit) 0c2a32a] Initial commit: MMSearch-R1 multimodal search with GRPO
+ 24 files changed, 15902 insertions(+)
+ create mode 100644 .env.example
+ create mode 100644 .gitignore
+ create mode 100644 .specstory/.project.json
+ create mode 100644 .specstory/cli/config.toml
+ create mode 100644 .specstory/history/2026-04-21_12-46-58Z-https-github-com-evolvinglmms.md
+ create mode 100644 .specstory/history/2026-04-22_01-58-09Z-pip-vendor-urllib3-exceptions.md
+ create mode 100644 .specstory/statistics.json
+ create mode 100644 README.md
+ create mode 100644 __init__.py
+ create mode 100644 app.py
+ create mode 100644 data/__init__.py
+ create mode 100644 data/factualvqa.py
+ create mode 100644 inference/__init__.py
+ create mode 100644 inference/engine.py
+ create mode 100644 requirements.txt
+ create mode 100644 scripts/eval.sh
+ create mode 100644 scripts/setup_autodl.sh
+ create mode 100644 scripts/train.sh
+ create mode 100644 search_tools/__init__.py
+ create mode 100644 search_tools/image_search.py
+ create mode 100644 search_tools/text_search.py
+ create mode 100644 train/__init__.py
+ create mode 100644 train/configs/h20_lora.yaml
+ create mode 100644 train/grpo_trainer.py
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:40:40Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Add GitHub remote
+
+`git remote add origin https://github.com/telanan/MMSearch_Agent.git`
+
+```text
+(Bash completed with no output)
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:40:48Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Push to GitHub main branch
+
+`git branch -M main && git push -u origin main`
+
+```text
+To https://github.com/telanan/MMSearch_Agent.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+</details></tool-use>
+
+_**Agent (<synthetic> 2026-04-22 02:40:48Z)**_
+
+API Error: 402 {"error":{"type":"insufficient_quota","message":"已达到总费用限制 ($2700)","code":"total_cost_limit_exceeded"},"currentCost":2700.137936,"costLimit":2700}
+
+---
+
+_**User (2026-04-22 02:42:09Z)**_
+
+继续
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:42:56Z)**_
+
+完成！项目已成功推送到 GitHub。
+
+**在 autodl 上运行的完整步骤：**
+
+```bash
+# 1. 克隆项目
+git clone https://github.com/telanan/MMSearch_Agent.git
+cd MMSearch_Agent
+
+# 2. 设置临时目录（避免空间问题）
+export TMPDIR=/root/autodl-tmp/pip_tmp
+mkdir -p $TMPDIR
+
+# 3. 运行项目自带的安装脚本
+bash scripts/setup_autodl.sh
+
+# 4. 配置 API keys
+cp .env.example .env
+nano .env  # 或用 vi 编辑，填入你的 API keys
+
+# 5. 测试运行
+streamlit run app.py --server.port 6006
+```
+
+**需要的 API Keys：**
+- `SERPAPI_KEY`（必需）- 用于网络搜索
+- `JINA_API_KEY`（可选）- 用于页面文本提取
+- `DASHSCOPE_API_KEY`（可选）- 用于 Qwen 摘要
+
+**autodl 端口访问：**
+Streamlit 默认运行在 6006 端口，autodl 会自动提供访问链接。
+
+项目地址：https://github.com/telanan/MMSearch_Agent
+
+---
+
+_**User (2026-04-22 02:54:16Z)**_
+
+脚本里面的路径写得不对，改一下，现在都在~/autodl-tmp/MMSearch_Agent
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:22Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./scripts/setup_autodl.sh`
+
+```text
+1	#!/usr/bin/env bash
+2	# AutoDL H20 96GB — MMSearch-R1 environment setup
+3	# Run once after creating the instance: bash scripts/setup_autodl.sh
+4	set -euo pipefail
+5	
+6	PROJ_DIR="/root/hybrid-rag"
+7	TMP_DIR="/root/autodl-tmp"
+8	MODEL_DIR="$TMP_DIR/models"
+9	DATASET_DIR="$TMP_DIR/datasets"
+10	
+11	echo "=== Creating directories ==="
+12	mkdir -p "$MODEL_DIR" "$DATASET_DIR/factualvqa" "$TMP_DIR/logs" "$TMP_DIR/checkpoints"
+13	
+14	echo "=== Cloning multimodal-search-r1 ==="
+15	cd "$PROJ_DIR"
+16	if [ ! -d "multimodal-search-r1" ]; then
+17	    git clone https://github.com/EvolvingLMMs-Lab/multimodal-search-r1.git
+18	fi
+19	
+20	echo "=== Installing Python dependencies ==="
+21	pip install -q --upgrade pip
+22	pip install -q torch torchvision --index-url https://download.pytorch.org/whl/cu124
+23	pip install -q transformers>=4.46.0 accelerate peft datasets huggingface_hub
+24	pip install -q vllm>=0.6.0
+25	pip install -q qwen-vl-utils Pillow requests openai
+26	pip install -q streamlit python-dotenv pydantic tqdm omegaconf
+27	
+28	echo "=== Installing veRL ==="
+29	if ! python -c "import verl" 2>/dev/null; then
+30	    pip install -q verl
+31	fi
+32	
+33	echo "=== Installing project in editable mode ==="
+34	pip install -q -e "$PROJ_DIR/mmsearch-r1"
+35	
+36	echo "=== Downloading MMSearch-R1-7B weights ==="
+37	python - <<'EOF'
+38	from huggingface_hub import snapshot_download
+39	snapshot_download(
+40	    repo_id="lmms-lab/MMSearch-R1-7B",
+41	    local_dir="/root/autodl-tmp/models/MMSearch-R1-7B",
+42	    ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],
+43	)
+44	print("MMSearch-R1-7B downloaded.")
+45	EOF
+46	
+47	echo "=== Downloading FactualVQA dataset ==="
+48	python - <<'EOF'
+49	from datasets import load_dataset
+50	ds = load_dataset("lmms-lab/FactualVQA", cache_dir="/root/autodl-tmp/datasets/factualvqa")
+51	print(f"FactualVQA: {ds}")
+52	EOF
+53	
+54	echo ""
+55	echo "=== Setup complete ==="
+56	echo "Next: set your API keys in .env and run: bash scripts/train.sh"
+57
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:22Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./scripts/train.sh`
+
+```text
+1	#!/usr/bin/env bash
+2	# Launch GRPO training on AutoDL H20 single GPU
+3	# Usage: bash scripts/train.sh [config_path]
+4	set -euo pipefail
+5	
+6	CONFIG="${1:-train/configs/h20_lora.yaml}"
+7	PROJ_DIR="/root/hybrid-rag/mmsearch-r1"
+8	
+9	# Load API keys
+10	if [ -f "$PROJ_DIR/.env" ]; then
+11	    export $(grep -v '^#' "$PROJ_DIR/.env" | xargs)
+12	fi
+13	
+14	echo "=== Starting MMSearch-R1 GRPO Training ==="
+15	echo "Config: $CONFIG"
+16	echo "GPU: $(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader)"
+17	echo ""
+18	
+19	cd "$PROJ_DIR"
+20	
+21	# veRL uses Ray for distributed training even on single GPU
+22	ray stop --force 2>/dev/null || true
+23	ray start --head --num-gpus=1 --num-cpus=8 --object-store-memory=10000000000
+24	
+25	PYTHONPATH="$PROJ_DIR:$PYTHONPATH" \
+26	CUDA_VISIBLE_DEVICES=0 \
+27	python train/grpo_trainer.py --config "$CONFIG" 2>&1 | tee /root/autodl-tmp/logs/train_$(date +%Y%m%d_%H%M%S).log
+28	
+29	echo "=== Training complete ==="
+30
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:22Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./scripts/eval.sh`
+
+```text
+1	#!/usr/bin/env bash
+2	# Quick evaluation on FactualVQA test split
+3	# Usage: bash scripts/eval.sh [model_path] [num_samples]
+4	set -euo pipefail
+5	
+6	MODEL="${1:-/root/autodl-tmp/models/MMSearch-R1-7B}"
+7	NUM_SAMPLES="${2:-200}"
+8	
+9	if [ -f ".env" ]; then
+10	    export $(grep -v '^#' .env | xargs)
+11	fi
+12	
+13	python - <<EOF
+14	import json
+15	from tqdm import tqdm
+16	from inference.engine import MMSearchEngine, GenerationConfig
+17	from data.factualvqa import load_factualvqa, compute_reward
+18	
+19	engine = MMSearchEngine(model_id="$MODEL")
+20	config = GenerationConfig(image_search_limit=1, text_search_limit=2, max_turns=3)
+21	ds = load_factualvqa("test", max_samples=$NUM_SAMPLES)
+22	
+23	results = []
+24	em_count = subem_count = 0
+25	
+26	for ex in tqdm(ds, desc="Evaluating"):
+27	    out = engine.run(
+28	        question=ex["question"],
+29	        image=ex.get("image"),
+30	        config=config,
+31	    )
+32	    reward_info = compute_reward(out["full_response"], ex["answers"])
+33	    results.append({**out, **reward_info, "gold_answers": ex["answers"]})
+34	    if reward_info["em"]: em_count += 1
+35	    if reward_info["subem"]: subem_count += 1
+36	
+37	n = len(results)
+38	print(f"\n=== Evaluation Results (n={n}) ===")
+39	print(f"  EM:    {em_count/n*100:.1f}%")
+40	print(f"  SubEM: {subem_count/n*100:.1f}%")
+41	avg_searches = sum(len(r["tool_calls"]) for r in results) / n
+42	print(f"  Avg searches per query: {avg_searches:.2f}")
+43	avg_reward = sum(r["reward"] for r in results) / n
+44	print(f"  Avg reward: {avg_reward:.4f}")
+45	
+46	with open("eval_results.json", "w") as f:
+47	    json.dump(results, f, indent=2, default=str)
+48	print("\nDetailed results saved to eval_results.json")
+49	EOF
+50
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:29Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:35Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:41Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/train.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:49Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit and push path fixes
+
+`git add scripts/ && git commit -m "Fix autodl paths to ~/autodl-tmp/MMSearch_Agent" && git push`
+
+```text
+[main c107132] Fix autodl paths to ~/autodl-tmp/MMSearch_Agent
+ 2 files changed, 3 insertions(+), 9 deletions(-)
+To https://github.com/telanan/MMSearch_Agent.git
+   0c2a32a..c107132  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:54:54Z)**_
+
+完成！脚本路径已更新并推送到 GitHub。
+
+**修改内容：**
+- [setup_autodl.sh](scripts/setup_autodl.sh) - 项目路径改为 `/root/autodl-tmp/MMSearch_Agent`
+- [train.sh](scripts/train.sh) - 项目路径改为 `/root/autodl-tmp/MMSearch_Agent`
+
+现在在 autodl 上可以直接运行：
+
+```bash
+cd ~/autodl-tmp
+git clone https://github.com/telanan/MMSearch_Agent.git
+cd MMSearch_Agent
+bash scripts/setup_autodl.sh
+```
+
+---
+
+_**User (2026-04-22 02:58:07Z)**_
+
+这样是重新下载一遍项目吗，可以直接git pull吗
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 02:58:14Z)**_
+
+对，如果你已经在 autodl 上有这个项目了，直接 pull 就行：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+git pull origin main
+```
+
+这样只会更新修改的文件（setup_autodl.sh 和 train.sh），不会重新下载整个项目。
+
+---
+
+_**User (2026-04-22 03:08:35Z)**_
+
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+卡在这了
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:08:46Z)**_
+
+这只是个警告，不是错误。可以忽略或者加参数消除警告。
+
+**方法 1：忽略警告继续运行**
+警告不影响安装，等待安装完成即可。
+
+**方法 2：修改脚本消除警告**
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:08:51Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:08:59Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:09:11Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit and push pip warning fix
+
+`git add scripts/setup_autodl.sh && git commit -m "Add --root-user-action=ignore to suppress pip warnings" && git push`
+
+```text
+[main e9378b6] Add --root-user-action=ignore to suppress pip warnings
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+To https://github.com/telanan/MMSearch_Agent.git
+   c107132..e9378b6  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:09:17Z)**_
+
+已更新并推送。在 autodl 上运行：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+git pull
+bash scripts/setup_autodl.sh
+```
+
+现在不会再显示那些警告了，安装过程会更清爽。
+
+---
+
+_**User (2026-04-22 03:13:35Z)**_
+
+我的.env里面不是配置过了API key了吗
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:13:43Z)**_
+
+是的，你本地的 `.env` 文件配置了 API key，但是：
+
+1. `.env` 文件在 `.gitignore` 中，**不会被推送到 GitHub**（这是安全做法，避免泄露密钥）
+2. 在 autodl 上 clone 下来的项目**没有 `.env` 文件**，只有 `.env.example`
+
+**在 autodl 上需要重新配置：**
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+cp .env.example .env
+nano .env  # 或用 vi 编辑
+```
+
+然后填入你的 API keys：
+- `SERPAPI_KEY=你的key`
+- `JINA_API_KEY=你的key`（可选）
+- `DASHSCOPE_API_KEY=你的key`（可选）
+
+或者你可以直接从本地复制 `.env` 文件的内容到 autodl 上。
+
+---
+
+_**User (2026-04-22 03:25:56Z)**_
+
+WARNING: Connection timed out while downloading.
+  WARNING: Attempting to resume incomplete download (115.9 MB/594.3 MB, attempt 1)
+  WARNING: Connection timed out while downloading.
+  WARNING: Attempting to resume incomplete download (39.3 MB/267.5 MB, attempt 1)
+好慢啊
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:26:05Z)**_
+
+autodl 下载 PyPI 包确实可能很慢。可以配置国内镜像源加速：
+
+**临时使用镜像（推荐先试试）：**
+
+```bash
+# 停止当前安装（Ctrl+C）
+# 使用清华镜像重新安装
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple torch torchvision --index-url https://download.pytorch.org/whl/cu124
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple transformers accelerate peft datasets huggingface_hub
+```
+
+**永久配置镜像源：**
+
+```bash
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+pip config set install.trusted-host pypi.tuna.tsinghua.edu.cn
+```
+
+**或者修改安装脚本使用镜像：**
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:26:09Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:26:15Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:26:23Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit and push mirror configuration
+
+`git add scripts/setup_autodl.sh && git commit -m "Use Tsinghua PyPI mirror for faster downloads in China" && git push`
+
+```text
+[main b3de7bd] Use Tsinghua PyPI mirror for faster downloads in China
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+To https://github.com/telanan/MMSearch_Agent.git
+   e9378b6..b3de7bd  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:26:27Z)**_
+
+已更新。在 autodl 上：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+git pull
+bash scripts/setup_autodl.sh
+```
+
+现在会使用清华镜像源，下载速度应该会快很多。
+
+---
+
+_**User (2026-04-22 03:54:24Z)**_
+
+=== Creating directories ===
+=== Installing Python dependencies ===
+卡在这好久了，怎么这么慢
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:54:31Z)**_
+
+pip 在安装大包时确实慢。可以去掉 `-q` 参数看看进度：
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:54:37Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:54:44Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:54:51Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit and push verbose output
+
+`git add scripts/setup_autodl.sh && git commit -m "Remove -q flag to show installation progress" && git push`
+
+```text
+[main 1c936ec] Remove -q flag to show installation progress
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+To https://github.com/telanan/MMSearch_Agent.git
+   b3de7bd..1c936ec  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 03:54:57Z)**_
+
+已更新。在 autodl 上：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+git pull
+bash scripts/setup_autodl.sh
+```
+
+现在会显示详细的安装进度，你可以看到具体在下载什么、进度多少。torch 和 vllm 这些包比较大，第一次安装需要等待一段时间。
+
+---
+
+_**User (2026-04-22 04:30:14Z)**_
+
+还是卡在第一步，不应该啊
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 04:30:25Z)**_
+
+可能是 pip 本身的问题。试试手动执行看看具体卡在哪：
+
+```bash
+# 先测试网络
+ping pypi.tuna.tsinghua.edu.cn
+
+# 手动执行第一条命令看输出
+pip install --upgrade pip --root-user-action=ignore -v
+
+# 或者跳过 pip 升级，直接安装 torch
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124 --root-user-action=ignore -v
+```
+
+**如果镜像有问题，试试其他镜像：**
+
+```bash
+# 阿里云镜像
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+
+# 或者中科大镜像
+pip config set global.index-url https://pypi.mirrors.ustc.edu.cn/simple/
+```
+
+**或者检查 autodl 镜像是否已经预装了这些包：**
+
+```bash
+python -c "import torch; print(torch.__version__)"
+python -c "import transformers; print(transformers.__version__)"
+```
+
+如果已经预装了，可能不需要重新安装。告诉我具体卡在哪个命令，我帮你调整脚本。
+
+---
+
+_**User (2026-04-22 05:33:22Z)**_
+
+root@autodl-container-bbc345868c-4706edda:~/autodl-tmp/MMSearch_Agent# bash scripts/setup_autodl.sh
+=== Creating directories ===
+=== Installing Python dependencies ===
+=== Installing veRL ===
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+opencv-python-headless 4.13.0.92 requires numpy>=2; python_version >= "3.9", but you have numpy 1.26.4 which is incompatible.
+=== Installing project in editable mode ===
+ERROR: file:///root/autodl-tmp/MMSearch_Agent does not appear to be a Python project: neither 'setup.py' nor 'pyproject.toml' found.
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 05:33:33Z)**_
+
+有两个问题：
+
+1. **numpy 版本冲突**（警告，可以忽略）
+2. **缺少 setup.py 或 pyproject.toml**（关键问题）
+
+项目需要添加 `setup.py` 才能以 editable 模式安装。创建一个：
+
+_**Agent (<synthetic> 2026-04-22 05:33:33Z)**_
+
+API Error: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()
+
+---
+
+_**User (2026-04-22 05:34:37Z)**_
+
+?
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 05:34:46Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Write"><details>
+<summary>Tool use: **Write**</summary>
+
+```python
+from setuptools import setup, find_packages
+
+setup(
+    name="mmsearch-agent",
+    version="0.1.0",
+    description="Multimodal Web Search with GRPO",
+    author="telanan",
+    packages=find_packages(),
+    python_requires=">=3.10",
+    install_requires=[
+        "torch>=2.3.0",
+        "torchvision",
+        "transformers>=4.46.0",
+        "accelerate>=0.33.0",
+        "peft>=0.12.0",
+        "vllm>=0.6.0",
+        "Pillow>=10.0.0",
+        "qwen-vl-utils",
+        "requests>=2.31.0",
+        "openai>=1.40.0",
+        "datasets>=2.20.0",
+        "huggingface_hub>=0.23.0",
+        "streamlit>=1.36.0",
+        "gradio>=4.40.0",
+        "numpy>=1.26.0",
+        "tqdm>=4.66.0",
+        "python-dotenv>=1.0.0",
+        "pydantic>=2.0.0",
+    ],
+)
+
+```
+
+```text
+File created successfully at: /Users/surely/Downloads/mmsearch-r1/setup.py
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 05:35:18Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit and push setup.py
+
+`git add setup.py && git commit -m "Add setup.py for editable installation" && git push`
+
+```text
+[main baff7b3] Add setup.py for editable installation
+ 1 file changed, 30 insertions(+)
+ create mode 100644 setup.py
+To https://github.com/telanan/MMSearch_Agent.git
+   1c936ec..baff7b3  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 05:35:23Z)**_
+
+完成。在 autodl 上：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+git pull
+bash scripts/setup_autodl.sh
+```
+
+现在应该可以正常安装了。numpy 的警告可以忽略，或者如果影响运行可以升级：
+
+```bash
+pip install numpy>=2.0.0 --root-user-action=ignore
+```
+
+---
+
+_**User (2026-04-22 06:03:42Z)**_
+
+不用git pull 了，你说改哪我直接在autodl命令行里面改
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:03:51Z)**_
+
+好的，直接在 autodl 上操作：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+
+# 创建 setup.py
+cat > setup.py << 'EOF'
+from setuptools import setup, find_packages
+
+setup(
+    name="mmsearch-agent",
+    version="0.1.0",
+    description="Multimodal Web Search with GRPO",
+    author="telanan",
+    packages=find_packages(),
+    python_requires=">=3.10",
+    install_requires=[
+        "torch>=2.3.0",
+        "torchvision",
+        "transformers>=4.46.0",
+        "accelerate>=0.33.0",
+        "peft>=0.12.0",
+        "vllm>=0.6.0",
+        "Pillow>=10.0.0",
+        "qwen-vl-utils",
+        "requests>=2.31.0",
+        "openai>=1.40.0",
+        "datasets>=2.20.0",
+        "huggingface_hub>=0.23.0",
+        "streamlit>=1.36.0",
+        "gradio>=4.40.0",
+        "numpy>=1.26.0",
+        "tqdm>=4.66.0",
+        "python-dotenv>=1.0.0",
+        "pydantic>=2.0.0",
+    ],
+)
+EOF
+
+# 重新运行安装脚本
+bash scripts/setup_autodl.sh
+```
+
+---
+
+_**User (2026-04-22 06:08:59Z)**_
+
+huggingface_hub.errors.LocalEntryNotFoundError: Got: ConnectError: [Errno 101] Network is unreachable
+An error happened while trying to locate the files on the Hub and we cannot find the appropriate snapshot folder for the specified revision on the local disk. Please check your internet connection and try again.
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:09:10Z)**_
+
+Hugging Face 网络不通。autodl 需要配置镜像访问 Hugging Face。
+
+**方法 1：使用 HF 镜像站（推荐）**
+
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+python - <<'EOF'
+from huggingface_hub import snapshot_download
+snapshot_download(
+    repo_id="lmms-lab/MMSearch-R1-7B",
+    local_dir="/root/autodl-tmp/models/MMSearch-R1-7B",
+    ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],
+)
+print("MMSearch-R1-7B downloaded.")
+EOF
+```
+
+**方法 2：修改脚本永久使用镜像**
+
+在 autodl 上编辑脚本：
+
+```bash
+nano scripts/setup_autodl.sh
+```
+
+在 `echo "=== Downloading MMSearch-R1-7B weights ==="` 这行之前添加：
+
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+```
+
+或者直接运行：
+
+```bash
+sed -i '/=== Downloading MMSearch-R1-7B weights ===/i export HF_ENDPOINT=https://hf-mirror.com' scripts/setup_autodl.sh
+bash scripts/setup_autodl.sh
+```
+
+**方法 3：如果镜像也慢，手动下载模型**
+
+跳过自动下载，后续手动指定本地模型路径或使用其他方式获取模型。
+
+---
+
+_**User (2026-04-22 06:14:06Z)**_
+
+为什么要下载这个
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:14:20Z)**_
+
+这个是项目的核心模型 **MMSearch-R1-7B**，用于：
+
+1. **推理/演示**（`streamlit run app.py`）- 需要加载这个模型来回答问题
+2. **训练的基础模型** - GRPO 训练是在这个模型基础上进行 LoRA 微调
+
+**如果你只是想测试环境安装，可以跳过模型下载：**
+
+在 autodl 上编辑脚本，注释掉下载部分：
+
+```bash
+nano scripts/setup_autodl.sh
+```
+
+找到这两段，在前面加 `#` 注释掉：
+
+```bash
+# echo "=== Downloading MMSearch-R1-7B weights ==="
+# python - <<'EOF'
+# ...
+# EOF
+
+# echo "=== Downloading FactualVQA dataset ==="
+# python - <<'EOF'
+# ...
+# EOF
+```
+
+或者直接运行：
+
+```bash
+sed -i '/=== Downloading MMSearch-R1-7B/,/^EOF$/s/^/# /' scripts/setup_autodl.sh
+sed -i '/=== Downloading FactualVQA/,/^EOF$/s/^/# /' scripts/setup_autodl.sh
+```
+
+这样只安装依赖，不下载模型和数据集。需要时再手动下载。
+
+---
+
+_**User (2026-04-22 06:17:27Z)**_
+
+这个项目的整个流程是什么
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:17:54Z)**_
+
+让我看看项目的核心文件来理解完整流程：
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:17:55Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./app.py`
+
+```text
+1	"""
+2	Streamlit demo for MMSearch-R1.
+3	
+4	Launch:
+5	    streamlit run app.py
+6	
+7	Shows:
+8	  - Image upload + question input
+9	  - Real-time tool call trace (which searches were made)
+10	  - Final answer with supporting retrieved evidence
+11	"""
+12	
+13	import os
+14	import streamlit as st
+15	from PIL import Image
+16	from dotenv import load_dotenv
+17	
+18	load_dotenv()
+19	
+20	st.set_page_config(
+21	    page_title="MMSearch-R1 Demo",
+22	    page_icon="🔍",
+23	    layout="wide",
+24	)
+25	
+26	# ─── Sidebar ─────────────────────────────────────────────────────────────────
+27	
+28	with st.sidebar:
+29	    st.title("MMSearch-R1")
+30	    st.caption("Multi-turn multimodal web search with RL-trained reasoning")
+31	
+32	    model_path = st.text_input(
+33	        "Model path",
+34	        value=os.environ.get("MMSEARCH_MODEL", "lmms-lab/MMSearch-R1-7B"),
+35	    )
+36	    max_new_tokens = st.slider("Max new tokens per turn", 64, 1024, 512, 64)
+37	    temperature = st.slider("Temperature", 0.0, 1.5, 0.7, 0.05)
+38	    image_search_limit = st.slider("Image search limit", 0, 3, 1)
+39	    text_search_limit = st.slider("Text search limit", 0, 5, 2)
+40	    max_turns = st.slider("Max turns", 1, 5, 3)
+41	
+42	    st.divider()
+43	    st.caption("API keys loaded from .env")
+44	    serpapi_ok = bool(os.environ.get("SERPAPI_KEY"))
+45	    st.markdown(f"SerpAPI: {'✅' if serpapi_ok else '❌ not set'}")
+46	    jina_ok = bool(os.environ.get("JINA_API_KEY"))
+47	    st.markdown(f"Jina: {'✅' if jina_ok else '⚠️ optional'}")
+48	    dash_ok = bool(os.environ.get("DASHSCOPE_API_KEY"))
+49	    st.markdown(f"DashScope: {'✅' if dash_ok else '⚠️ optional (fallback: truncation)'}")
+50	
+51	
+52	# ─── Model loading (cached) ───────────────────────────────────────────────────
+53	
+54	@st.cache_resource(show_spinner="Loading MMSearch-R1 model…")
+55	def get_engine(path: str):
+56	    from inference.engine import MMSearchEngine
+57	    return MMSearchEngine(model_id=path)
+58	
+59	
+60	# ─── Main UI ─────────────────────────────────────────────────────────────────
+61	
+62	st.title("🔍 MMSearch-R1 — Multimodal Web Search")
+63	st.markdown(
+64	    "Upload an image (optional) and ask a question. "
+65	    "The model will autonomously search the web when needed."
+66	)
+67	
+68	col1, col2 = st.columns([1, 2])
+69	
+70	with col1:
+71	    uploaded = st.file_uploader("Upload image (optional)", type=["png", "jpg", "jpeg", "webp"])
+72	    if uploaded:
+73	        image = Image.open(uploaded).convert("RGB")
+74	        st.image(image, caption="Input image", use_container_width=True)
+75	    else:
+76	        image = None
+77	
+78	with col2:
+79	    question = st.text_area(
+80	        "Question",
+81	        placeholder="What is shown in this image? Who created it? When?",
+82	        height=100,
+83	    )
+84	    run_btn = st.button("Search & Answer", type="primary", disabled=not question.strip())
+85	
+86	if run_btn and question.strip():
+87	    from inference.engine import GenerationConfig
+88	
+89	    engine = get_engine(model_path)
+90	    config = GenerationConfig(
+91	        max_new_tokens=max_new_tokens,
+92	        temperature=temperature,
+93	        do_sample=temperature > 0,
+94	        image_search_limit=image_search_limit,
+95	        text_search_limit=text_search_limit,
+96	        max_turns=max_turns,
+97	    )
+98	
+99	    with st.spinner("Reasoning and searching…"):
+100	        result = engine.run(question=question, image=image, config=config, verbose=False)
+101	
+102	    st.divider()
+103	
+104	    # Answer
+105	    st.subheader("Answer")
+106	    st.success(result["answer"] if result["answer"] else "_No answer extracted_")
+107	
+108	    # Tool call trace
+109	    if result["tool_calls"]:
+110	        st.subheader(f"Search trace ({len(result['tool_calls'])} tool call{'s' if len(result['tool_calls']) != 1 else ''})")
+111	        for i, call in enumerate(result["tool_calls"], 1):
+112	            if call["type"] == "image_search":
+113	                st.markdown(f"**{i}.** 🖼 Image search → `{call['url']}`")
+114	            else:
+115	                st.markdown(f"**{i}.** 🔤 Text search → `{call['query']}`")
+116	    else:
+117	        st.info("No web searches were needed — the model answered from memory.")
+118	
+119	    # Full reasoning
+120	    with st.expander("Full reasoning trace"):
+121	        st.text(result["full_response"])
+122	
+123	    st.caption(f"Completed in {result['turns']} turn{'s' if result['turns'] != 1 else ''}")
+124
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:17:56Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./inference/engine.py`
+
+```text
+1	"""
+2	MMSearch-R1 inference engine.
+3	
+4	Loads lmms-lab/MMSearch-R1-7B and runs multi-turn tool-augmented generation.
+5	Supports two tools:
+6	  - <search><img>URL</img>URL</search>  → call_image_search
+7	  - <text_search>query</text_search>   → call_text_search
+8	
+9	Tool results are injected as <information>…</information> and generation continues.
+10	Max turns controlled by image_search_limit and text_search_limit.
+11	"""
+12	
+13	import re
+14	import os
+15	from dataclasses import dataclass, field
+16	from typing import Optional
+17	
+18	import torch
+19	from PIL import Image
+20	from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+21	
+22	from search_tools import call_image_search, call_text_search
+23	
+24	MODEL_ID = os.environ.get("MMSEARCH_MODEL", "lmms-lab/MMSearch-R1-7B")
+25	
+26	# XML tag patterns
+27	_PAT_IMAGE_SEARCH = re.compile(
+28	    r"<search>(?:<img>(.*?)</img>)?(.*?)</search>", re.DOTALL
+29	)
+30	_PAT_TEXT_SEARCH = re.compile(r"<text_search>(.*?)</text_search>", re.DOTALL)
+31	_PAT_ANSWER = re.compile(r"<answer>(.*?)</answer>", re.DOTALL)
+32	
+33	
+34	@dataclass
+35	class GenerationConfig:
+36	    max_new_tokens: int = 512
+37	    temperature: float = 0.7
+38	    do_sample: bool = True
+39	    image_search_limit: int = 1
+40	    text_search_limit: int = 2
+41	    max_turns: int = 3
+42	
+43	
+44	@dataclass
+45	class TurnState:
+46	    image_searches_used: int = 0
+47	    text_searches_used: int = 0
+48	    turns: int = 0
+49	    tool_calls: list = field(default_factory=list)
+50	
+51	
+52	class MMSearchEngine:
+53	    def __init__(self, model_id: str = MODEL_ID, device: str = "auto"):
+54	        print(f"Loading model: {model_id}")
+55	        self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
+56	        self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+57	            model_id,
+58	            torch_dtype=torch.bfloat16,
+59	            device_map=device,
+60	            trust_remote_code=True,
+61	        )
+62	        self.model.eval()
+63	        print("Model loaded.")
+64	
+65	    def _build_messages(
+66	        self,
+67	        question: str,
+68	        image: Optional[Image.Image],
+69	        conversation_history: list[dict],
+70	    ) -> list[dict]:
+71	        if not conversation_history:
+72	            content = []
+73	            if image is not None:
+74	                content.append({"type": "image", "image": image})
+75	            content.append({"type": "text", "text": question})
+76	            return [{"role": "user", "content": content}]
+77	        return conversation_history
+78	
+79	    def _generate(
+80	        self,
+81	        messages: list[dict],
+82	        config: GenerationConfig,
+83	    ) -> tuple[str, list]:
+84	        """Run one forward pass, return (text, images_in_context)."""
+85	        images = []
+86	        for msg in messages:
+87	            if isinstance(msg.get("content"), list):
+88	                for part in msg["content"]:
+89	                    if part.get("type") == "image":
+90	                        images.append(part["image"])
+91	
+92	        text_input = self.processor.apply_chat_template(
+93	            messages, tokenize=False, add_generation_prompt=True
+94	        )
+95	        inputs = self.processor(
+96	            text=[text_input],
+97	            images=images if images else None,
+98	            return_tensors="pt",
+99	        ).to(self.model.device)
+100	
+101	        with torch.no_grad():
+102	            output_ids = self.model.generate(
+103	                **inputs,
+104	                max_new_tokens=config.max_new_tokens,
+105	                temperature=config.temperature if config.do_sample else 1.0,
+106	                do_sample=config.do_sample,
+107	            )
+108	
+109	        input_len = inputs["input_ids"].shape[1]
+110	        new_tokens = output_ids[0][input_len:]
+111	        return self.processor.decode(new_tokens, skip_special_tokens=True), images
+112	
+113	    def _execute_tool(
+114	        self,
+115	        response_text: str,
+116	        state: TurnState,
+117	        config: GenerationConfig,
+118	    ) -> tuple[Optional[str], list[Image.Image]]:
+119	        """
+120	        Parse tool call from response text, execute it, return (info_text, new_images).
+121	        Returns (None, []) if no tool call found or limits exhausted.
+122	        """
+123	        # Try image search first
+124	        img_match = _PAT_IMAGE_SEARCH.search(response_text)
+125	        if img_match and state.image_searches_used < config.image_search_limit:
+126	            img_url = (img_match.group(1) or img_match.group(2) or "").strip()
+127	            if img_url:
+128	                state.image_searches_used += 1
+129	                state.tool_calls.append({"type": "image_search", "url": img_url})
+130	                info_text, thumbnails, meta = call_image_search(img_url)
+131	                return info_text, thumbnails
+132	
+133	        # Try text search
+134	        txt_match = _PAT_TEXT_SEARCH.search(response_text)
+135	        if txt_match and state.text_searches_used < config.text_search_limit:
+136	            query = txt_match.group(1).strip()
+137	            state.text_searches_used += 1
+138	            state.tool_calls.append({"type": "text_search", "query": query})
+139	            info_text, meta = call_text_search(query)
+140	            return info_text, []
+141	
+142	        return None, []
+143	
+144	    def run(
+145	        self,
+146	        question: str,
+147	        image: Optional[Image.Image] = None,
+148	        config: Optional[GenerationConfig] = None,
+149	        verbose: bool = False,
+150	    ) -> dict:
+151	        """
+152	        Multi-turn inference with tool use.
+153	
+154	        Returns:
+155	            {
+156	                "answer": str,
+157	                "full_response": str,
+158	                "tool_calls": list,
+159	                "turns": int,
+160	            }
+161	        """
+162	        if config is None:
+163	            config = GenerationConfig()
+164	
+165	        state = TurnState()
+166	        messages = self._build_messages(question, image, [])
+167	        full_response_parts = []
+168	
+169	        while state.turns < config.max_turns:
+170	            response_text, _ = self._generate(messages, config)
+171	            full_response_parts.append(response_text)
+172	            state.turns += 1
+173	
+174	            if verbose:
+175	                print(f"\n--- Turn {state.turns} ---\n{response_text}\n")
+176	
+177	            # Check for final answer
+178	            answer_match = _PAT_ANSWER.search(response_text)
+179	            if answer_match:
+180	                return {
+181	                    "answer": answer_match.group(1).strip(),
+182	                    "full_response": "\n".join(full_response_parts),
+183	                    "tool_calls": state.tool_calls,
+184	                    "turns": state.turns,
+185	                }
+186	
+187	            # Try to execute a tool
+188	            info_text, new_images = self._execute_tool(response_text, state, config)
+189	            if info_text is None:
+190	                # No tool call and no answer — treat last generation as answer
+191	                break
+192	
+193	            # Append assistant turn + tool result as user turn
+194	            messages.append({"role": "assistant", "content": response_text})
+195	            info_content: list[dict] = []
+196	            for img in new_images:
+197	                info_content.append({"type": "image", "image": img})
+198	            info_content.append(
+199	                {"type": "text", "text": f"<information>\n{info_text}\n</information>"}
+200	            )
+201	            messages.append({"role": "user", "content": info_content})
+202	
+203	        # Exhausted turns — extract best answer from last response
+204	        last = full_response_parts[-1] if full_response_parts else ""
+205	        answer_match = _PAT_ANSWER.search(last)
+206	        return {
+207	            "answer": answer_match.group(1).strip() if answer_match else last.strip(),
+208	            "full_response": "\n".join(full_response_parts),
+209	            "tool_calls": state.tool_calls,
+210	            "turns": state.turns,
+211	        }
+212
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:17:56Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./train/grpo_trainer.py`
+
+```text
+1	"""
+2	veRL GRPO trainer for MMSearch-R1 on FactualVQA.
+3	
+4	Usage (on AutoDL H20 single GPU):
+5	    python train/grpo_trainer.py --config train/configs/h20_lora.yaml
+6	
+7	This file wires together:
+8	  1. FactualVQA dataset
+9	  2. The MMSearch-R1 reward function
+10	  3. veRL's RayPPOTrainer (used for GRPO) with the vllm_multiturn_mmsearch rollout
+11	
+12	veRL GRPO is PPO with:
+13	  - No critic (KL-penalized value-free objective)
+14	  - Group-relative advantages (normalized within each prompt group)
+15	  - Sparse reward: assigned only at the final <answer> token
+16	
+17	Integration note:
+18	  veRL expects a reward_fn with signature:
+19	    reward_fn(data: DataProto) -> torch.Tensor
+20	  where data.batch["responses"] contains the decoded text from rollout.
+21	"""
+22	
+23	import os
+24	import re
+25	import torch
+26	from functools import partial
+27	from typing import Optional
+28	
+29	# veRL imports — installed from https://github.com/volcengine/verl
+30	try:
+31	    from verl import DataProto
+32	    from verl.trainer.ppo.ray_trainer import RayPPOTrainer
+33	    from verl.utils.reward_score import RewardManager
+34	    _VERL_AVAILABLE = True
+35	except ImportError:
+36	    _VERL_AVAILABLE = False
+37	    print("[WARNING] veRL not installed. Training will not work. Install with:")
+38	    print("  pip install verl  OR  pip install -e git+https://github.com/volcengine/verl.git")
+39	
+40	from data.factualvqa import compute_reward, load_factualvqa
+41	
+42	
+43	# ─── Reward function ─────────────────────────────────────────────────────────
+44	
+45	def mmsearch_reward_fn(data: "DataProto", tokenizer) -> torch.Tensor:
+46	    """
+47	    Reward function compatible with veRL's DataProto interface.
+48	
+49	    Decodes responses, computes EM/SubEM + penalties, returns per-sample reward tensor.
+50	    Reward is sparse: assigned only at the last non-padding token.
+51	    """
+52	    responses = data.batch["responses"]          # (B, seq_len) token ids
+53	    gold_answers_list = data.non_tensor_batch["gold_answers"]  # list of list[str]
+54	
+55	    rewards = torch.zeros(responses.shape[0], responses.shape[1], dtype=torch.float32)
+56	
+57	    for i, (resp_ids, gold_answers) in enumerate(zip(responses, gold_answers_list)):
+58	        resp_text = tokenizer.decode(resp_ids, skip_special_tokens=True)
+59	        result = compute_reward(resp_text, gold_answers, use_substring_match=True)
+60	
+61	        # Find last real token (non-padding)
+62	        pad_id = tokenizer.pad_token_id or 0
+63	        non_pad = (resp_ids != pad_id).nonzero(as_tuple=True)[0]
+64	        last_idx = non_pad[-1].item() if len(non_pad) > 0 else (responses.shape[1] - 1)
+65	
+66	        rewards[i, last_idx] = result["reward"]
+67	
+68	    return rewards
+69	
+70	
+71	# ─── Dataset → veRL DataProto ─────────────────────────────────────────────────
+72	
+73	def build_verl_dataset(
+74	    split: str = "train",
+75	    cache_dir: Optional[str] = None,
+76	    max_samples: Optional[int] = None,
+77	):
+78	    """Return HuggingFace Dataset formatted for veRL."""
+79	    ds = load_factualvqa(split=split, cache_dir=cache_dir, max_samples=max_samples)
+80	    return ds
+81	
+82	
+83	# ─── Training entry point ────────────────────────────────────────────────────
+84	
+85	def train(config_path: str):
+86	    """
+87	    Launch veRL GRPO training.
+88	
+89	    Config is a YAML file (see train/configs/h20_lora.yaml).
+90	    """
+91	    if not _VERL_AVAILABLE:
+92	        raise RuntimeError("veRL is required for training. See installation instructions above.")
+93	
+94	    import yaml
+95	    from omegaconf import OmegaConf
+96	
+97	    with open(config_path) as f:
+98	        cfg = OmegaConf.create(yaml.safe_load(f))
+99	
+100	    # Build dataset
+101	    cache_dir = cfg.get("dataset", {}).get("cache_dir", None)
+102	    max_samples = cfg.get("dataset", {}).get("max_samples", None)
+103	    train_ds = build_verl_dataset("train", cache_dir=cache_dir, max_samples=max_samples)
+104	
+105	    # Reward manager
+106	    from transformers import AutoTokenizer
+107	    tokenizer = AutoTokenizer.from_pretrained(cfg.model.model_path, trust_remote_code=True)
+108	    reward_fn = partial(mmsearch_reward_fn, tokenizer=tokenizer)
+109	
+110	    # Launch trainer
+111	    trainer = RayPPOTrainer(
+112	        config=cfg,
+113	        tokenizer=tokenizer,
+114	        role_worker_mapping=cfg.get("role_worker_mapping", None),
+115	        resource_pool_manager=None,
+116	        ray_worker_group_cls=None,
+117	        reward_fn=reward_fn,
+118	        val_reward_fn=reward_fn,
+119	    )
+120	    trainer.init_workers()
+121	    trainer.fit()
+122	
+123	
+124	if __name__ == "__main__":
+125	    import argparse
+126	
+127	    parser = argparse.ArgumentParser()
+128	    parser.add_argument("--config", default="train/configs/h20_lora.yaml")
+129	    args = parser.parse_args()
+130	    train(args.config)
+131
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:18:17Z)**_
+
+**MMSearch-R1 项目完整流程：**
+
+## 1. 核心功能
+多模态视觉问答系统，能自主调用网络搜索工具来回答问题。
+
+## 2. 三大模块
+
+### **A. 推理模块（Inference）**
+- **文件**：[inference/engine.py](inference/engine.py)
+- **功能**：加载 MMSearch-R1-7B 模型，执行多轮对话 + 工具调用
+- **工具**：
+  - 图像搜索：`<search><img>URL</img></search>` → Google Lens 反向搜索
+  - 文本搜索：`<text_search>query</text_search>` → 网页搜索 + 摘要
+- **流程**：
+  1. 用户提问（可带图片）
+  2. 模型生成回答，可能包含工具调用标签
+  3. 执行工具，将结果作为 `<information>` 注入
+  4. 继续生成，直到输出 `<answer>` 或达到最大轮次
+
+### **B. 训练模块（Training）**
+- **文件**：[train/grpo_trainer.py](train/grpo_trainer.py)
+- **算法**：GRPO（Group Relative Policy Optimization）- 无 critic 的强化学习
+- **数据集**：FactualVQA（事实性视觉问答）
+- **奖励函数**：
+  ```
+  reward = answer_reward - 0.1 × 搜索次数 - 0.1 × 格式错误
+  answer_reward = 1.0（完全匹配或子串匹配）或 0.0
+  ```
+- **训练目标**：让模型学会何时搜索、搜索什么、如何整合信息
+
+### **C. 演示界面（Demo）**
+- **文件**：[app.py](app.py)
+- **框架**：Streamlit
+- **功能**：
+  - 上传图片 + 输入问题
+  - 实时显示工具调用轨迹
+  - 展示最终答案和完整推理过程
+
+## 3. 完整使用流程
+
+```
+安装环境 → 配置 API → 推理测试 → （可选）GRPO 训练 → 评估
+```
+
+**具体步骤：**
+
+1. **环境搭建**：`bash scripts/setup_autodl.sh`
+2. **配置密钥**：编辑 `.env` 填入 SERPAPI_KEY
+3. **推理演示**：`streamlit run app.py`
+4. **训练（可选）**：`bash scripts/train.sh` - 在 FactualVQA 上微调
+5. **评估**：`bash scripts/eval.sh` - 测试准确率
+
+## 4. 为什么需要下载模型
+
+- **MMSearch-R1-7B** 是已经预训练好的基础模型
+- 推理和训练都需要它
+- 如果只想测试代码结构，可以跳过下载，但无法实际运行
+
+**简单理解**：这是一个"会上网搜索的多模态 AI"，通过强化学习训练它学会何时、如何使用搜索工具来提高回答准确性。
+
+---
+
+_**User (2026-04-22 06:21:11Z)**_
+
+https://github.com/EvolvingLMMs-Lab/multimodal-search-r1
+我是参考的这个项目
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:21:26Z)**_
+
+明白了，你是基于 [EvolvingLMMs-Lab/multimodal-search-r1](https://github.com/EvolvingLMMs-Lab/multimodal-search-r1) 这个官方项目进行的改编。
+
+**你的项目 vs 原项目的区别：**
+
+1. **项目结构简化** - 你提取了核心功能
+2. **路径适配** - 针对 autodl 环境调整了路径配置
+3. **安装脚本优化** - 添加了镜像源、去除警告等
+
+**现在的问题：**
+
+你的 `setup_autodl.sh` 脚本里还有这段：
+
+```bash
+echo "=== Downloading MMSearch-R1-7B weights ==="
+```
+
+这是必需的，因为：
+- 原项目的模型托管在 Hugging Face
+- 你需要这个 7B 模型才能运行推理和训练
+- 模型大小约 14GB
+
+**建议的解决方案：**
+
+在 autodl 上，使用 HF 镜像下载模型：
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+
+# 设置 HF 镜像
+export HF_ENDPOINT=https://hf-mirror.com
+
+# 手动下载模型
+python - <<'EOF'
+from huggingface_hub import snapshot_download
+snapshot_download(
+    repo_id="lmms-lab/MMSearch-R1-7B",
+    local_dir="/root/autodl-tmp/models/MMSearch-R1-7B",
+    ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],
+)
+print("Model downloaded.")
+EOF
+```
+
+或者如果你只想先测试代码结构，可以暂时跳过模型下载，等需要实际运行时再下。
+
+你现在想继续下载模型，还是先跳过测试其他部分？
+
+---
+
+_**User (2026-04-22 06:21:48Z)**_
+
+原项目的整个流程是什么
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:22:12Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="WebFetch"><details>
+<summary>Tool use: **WebFetch**</summary>
+ `https://github.com/EvolvingLMMs-Lab/multimodal-search-r1`
+
+```text
+# MMSearch-R1 Project Overview
+
+## What It Does
+MMSearch-R1 is an end-to-end reinforcement learning framework that trains large multimodal models (LMMs) to autonomously perform multi-turn searches using real-world search tools. It teaches models when and how to search for information to answer questions more accurately.
+
+## Main Components
+
+**1. Multimodal Search Tools**
+- **Image Search Tool**: Uses SerpAPI to find visually relevant web pages from image queries, returning thumbnails and titles
+- **Text Search Tool**: Combines SerpAPI (retrieval) + JINA Reader (content parsing) + Qwen3-32B (summarization) to return condensed passages from top-k web pages
+
+**2. Base Model**
+- Built on Qwen2.5-VL architecture
+- Released as MMSearch-R1-7B on Hugging Face
+
+**3. Training Framework**
+- Uses veRL (Volcano Engine RL library) as the underlying RL infrastructure
+- Implements GRPO (Group Relative Policy Optimization) for training
+
+## Complete Pipeline
+
+**Data Construction:**
+- Uses FactualVQA (FVQA) dataset with cached image search results
+- Data formatted according to veRL specifications
+- Example datasets provided in `mmsearch_r1/data`
+
+**Training Process:**
+1. Multi-turn rollout with `vllm_multiturn_mmsearch` rollout strategy
+2. Model generates queries, calls search tools, receives results
+3. GRPO optimizes policy based on final answer quality
+4. Key configs: `max_gen_round` (max turns), `max_response_length` (per turn), `response_length_total` (conversation limit)
+
+**Inference/Evaluation:**
+- Set `trainer.val_only=True` for evaluation mode
+- Responses saved as JSON for analysis
+- Can log generations to Weights & Biases
+
+## Key Features
+
+- **On-demand search**: Model learns when searching is necessary vs. answering directly
+- **Multi-turn capability**: Can perform multiple search iterations to refine information
+- **Tool integration**: Real-world search APIs (SerpAPI, JINA Reader)
+- **Multimodal**: Handles both image and text queries
+- **End-to-end RL**: Direct optimization for search-augmented question answering
+
+## GRPO Training in Context
+
+GRPO (Group Relative Policy Optimization) trains the model by:
+1. Generating multiple response trajectories (including search actions) for each question
+2. Evaluating final answer quality as rewards
+3. Computing relative advantages within each group of responses
+4. Updating the policy to increase probability of higher-reward search strategies
+
+The framework uses `use_multi_turn_response_mask=True` to properly calculate losses across multiple conversation turns, ensuring the model learns effective search patterns rather than just final answer generation.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:22:32Z)**_
+
+**原项目 (EvolvingLMMs-Lab/multimodal-search-r1) 完整流程：**
+
+## 核心目标
+训练大型多模态模型（LMM）学会**自主决策何时搜索、搜索什么**，通过强化学习优化搜索策略。
+
+## 完整流程
+
+### **1. 数据准备阶段**
+- **数据集**：FactualVQA（事实性视觉问答）
+- **预处理**：缓存图像搜索结果，避免重复调用 API
+- **格式化**：转换为 veRL 框架所需的格式
+
+### **2. 搜索工具集成**
+**图像搜索工具：**
+- SerpAPI → Google Lens 反向搜索
+- 返回：相关网页缩略图 + 标题
+
+**文本搜索工具：**
+- SerpAPI（检索）→ JINA Reader（解析网页）→ Qwen3-32B（摘要）
+- 返回：Top-K 网页的浓缩文本
+
+### **3. GRPO 强化学习训练**
+
+**训练循环：**
+```
+问题输入 → 模型生成（可能包含搜索请求）
+         ↓
+    执行搜索工具
+         ↓
+    返回搜索结果 → 模型继续生成
+         ↓
+    重复多轮（max_gen_round）
+         ↓
+    输出最终答案 → 计算奖励
+         ↓
+    GRPO 更新策略
+```
+
+**GRPO 工作原理：**
+1. 对每个问题生成**多条轨迹**（不同的搜索策略）
+2. 评估每条轨迹的最终答案质量（奖励）
+3. 计算**组内相对优势**（同一问题的不同策略对比）
+4. 更新策略：增加高奖励策略的概率
+
+**关键配置：**
+- `max_gen_round`：最大搜索轮次
+- `max_response_length`：每轮生成长度
+- `use_multi_turn_response_mask=True`：正确计算多轮对话的损失
+
+### **4. 推理/评估阶段**
+- 设置 `trainer.val_only=True` 进入评估模式
+- 模型自主决策是否搜索、搜索什么
+- 输出保存为 JSON，可上传到 Weights & Biases
+
+### **5. 模型发布**
+- 基于 Qwen2.5-VL 架构
+- 发布为 **MMSearch-R1-7B**（Hugging Face）
+
+## 与你的项目对比
+
+| 维度 | 原项目 | 你的项目 |
+|------|--------|----------|
+| **范围** | 完整的训练+推理框架 | 提取核心功能 |
+| **训练** | 完整 veRL GRPO 训练流程 | 保留训练脚本 |
+| **推理** | 多轮工具调用引擎 | 同样实现 |
+| **部署** | 通用环境 | 针对 autodl 优化 |
+| **依赖** | 原始 PyPI 源 | 添加国内镜像 |
+
+## 关键创新点
+
+1. **端到端 RL**：直接优化搜索策略，而非分阶段训练
+2. **按需搜索**：模型学会判断何时需要搜索（不是每次都搜）
+3. **多轮迭代**：可以根据初次搜索结果决定是否继续搜索
+4. **真实工具**：使用真实的搜索 API，而非模拟环境
+
+**简单理解**：这是一个"教 AI 学会上网查资料"的项目，通过强化学习让模型掌握搜索的时机和策略，就像人类做研究时会多次搜索、整合信息一样。
+
+---
+
+_**User (2026-04-22 06:46:50Z)**_
+
+原项目训练的事qwen-2.5vl吗，还是MMSearch-R1-7B
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:47:02Z)**_
+
+看原项目的逻辑：
+
+**训练的是 Qwen2.5-VL → 训练后得到 MMSearch-R1-7B**
+
+具体流程：
+
+1. **起点**：Qwen2.5-VL（基础多模态模型）
+2. **训练过程**：在 FactualVQA 数据集上用 GRPO 训练，学习搜索策略
+3. **终点**：MMSearch-R1-7B（训练后的模型，发布到 Hugging Face）
+
+**MMSearch-R1-7B 就是训练后的 Qwen2.5-VL**，它：
+- 保留了 Qwen2.5-VL 的架构
+- 增加了搜索工具调用能力
+- 学会了何时、如何使用搜索
+
+**类比：**
+- Qwen2.5-VL = 会看图说话的学生
+- GRPO 训练 = 教他学会查资料
+- MMSearch-R1-7B = 会看图、会查资料、会整合信息的学生
+
+**你的项目中：**
+- 如果要**从头训练**：需要下载 Qwen2.5-VL 作为基础模型
+- 如果只是**推理/演示**：直接用 MMSearch-R1-7B（已训练好的）
+- 如果要**继续微调**：可以基于 MMSearch-R1-7B 继续训练
+
+所以 `setup_autodl.sh` 下载的 MMSearch-R1-7B 是**已经训练好的模型**，可以直接用于推理，也可以作为继续训练的起点。
+
+---
+
+_**User (2026-04-22 06:49:01Z)**_
+
+那我还继续训练什么，我就是要从头训练呀，有什么可以继续训练的点
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:11Z)**_
+
+你说得对！如果要**从头训练**，应该：
+
+## 从头训练的正确流程
+
+**起点模型应该是：Qwen2.5-VL（基础模型）**
+- 不是 MMSearch-R1-7B（那是训练后的结果）
+
+**可以继续训练 MMSearch-R1-7B 的场景：**
+
+1. **领域适配**：在特定领域数据上微调
+   - 例如：医疗图像问答、法律文档检索
+   
+2. **工具扩展**：添加新的搜索工具
+   - 例如：学术搜索、代码搜索、数据库查询
+
+3. **策略优化**：调整搜索策略
+   - 例如：减少搜索次数、提高准确率
+
+4. **多语言适配**：在中文数据上训练
+
+5. **更大数据集**：用更多数据继续训练
+
+## 修改你的项目以从头训练
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:16Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:22Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./train/configs/h20_lora.yaml`
+
+```text
+1	# MMSearch-R1 GRPO Training Config — AutoDL H20 96GB, Single GPU
+2	# Launch: python train/grpo_trainer.py --config train/configs/h20_lora.yaml
+3	
+4	model:
+5	  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
+6	  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+7	  trust_remote_code: true
+8	
+9	  # LoRA — fits comfortably in ~55 GB, leaving room for KV cache + activations
+10	  use_lora: true
+11	  lora_rank: 64
+12	  lora_alpha: 128
+13	  lora_dropout: 0.05
+14	  lora_target_modules:
+15	    - q_proj
+16	    - k_proj
+17	    - v_proj
+18	    - o_proj
+19	    - gate_proj
+20	    - up_proj
+21	    - down_proj
+22	
+23	dataset:
+24	  train_files: lmms-lab/FactualVQA  # HF dataset id
+25	  cache_dir: /root/autodl-tmp/datasets/factualvqa
+26	  max_samples: null  # set e.g. 1000 for debugging
+27	
+28	trainer:
+29	  total_epochs: 3
+30	  project_name: mmsearch-r1-grpo
+31	  experiment_name: h20-lora-r64
+32	  logger: ["console", "tensorboard"]
+33	  log_dir: /root/autodl-tmp/logs/mmsearch-r1
+34	
+35	  # GRPO / PPO settings
+36	  n_gpus_per_node: 1
+37	  nnodes: 1
+38	  train_batch_size: 64        # number of prompts per update step
+39	  ppo_mini_batch_size: 16     # micro-batch size for gradient accumulation
+40	  ppo_epochs: 1               # GRPO uses 1 epoch per rollout batch
+41	  kl_coef: 0.001              # KL regularization weight
+42	  clip_ratio: 0.2             # PPO clip epsilon
+43	  entropy_coef: 0.0
+44	
+45	  # Group-relative advantage: sample G responses per prompt
+46	  rollout_n: 8                # G = 8 responses per prompt
+47	  rollout_temperature: 0.9
+48	  rollout_top_p: 0.95
+49	
+50	  max_response_length: 2048
+51	  response_length_total: 8192  # max context including tools
+52	
+53	  # Gradient
+54	  learning_rate: 1.0e-5
+55	  weight_decay: 0.0
+56	  max_grad_norm: 1.0
+57	  warmup_steps: 20
+58	
+59	  save_freq: 200             # save checkpoint every N steps
+60	  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1
+61	
+62	rollout:
+63	  rollout_backend: vllm
+64	  rollout_name: vllm_multiturn_mmsearch
+65	  tensor_parallel_size: 1
+66	  gpu_memory_utilization: 0.5  # leave ~50% for training
+67	  enforce_eager: false
+68	
+69	  # Tool limits (per rollout episode)
+70	  image_search_limit: 1
+71	  text_search_limit: 2
+72	  max_gen_round: 3
+73	
+74	reward:
+75	  search_penalty: 0.1
+76	  format_penalty: 0.1
+77	  use_substring_match: true
+78
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:28Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/train/configs/h20_lora.yaml has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:37Z)**_
+
+<tool-use data-tool-type="shell" data-tool-name="Bash"><details>
+<summary>Tool use: **Bash**</summary>
+Commit changes for training from scratch
+
+`git add scripts/setup_autodl.sh train/configs/h20_lora.yaml && git commit -m "Change to train from scratch using Qwen2.5-VL-7B base model" && git push`
+
+```text
+[main 3add265] Change to train from scratch using Qwen2.5-VL-7B base model
+ 2 files changed, 18 insertions(+), 6 deletions(-)
+To https://github.com/telanan/MMSearch_Agent.git
+   baff7b3..3add265  main -> main
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:49:48Z)**_
+
+完成！现在你的项目配置为**从头训练**。
+
+## 修改内容
+
+1. **setup_autodl.sh**：下载 Qwen2.5-VL-7B-Instruct（基础模型）而非 MMSearch-R1-7B
+2. **h20_lora.yaml**：训练配置指向 Qwen2.5-VL-7B-Instruct
+
+## 从头训练 vs 继续训练对比
+
+| 场景 | 基础模型 | 训练目标 | 适用情况 |
+|------|----------|----------|----------|
+| **从头训练** | Qwen2.5-VL-7B | 教会搜索能力 | 复现原论文、自定义搜索策略 |
+| **继续训练** | MMSearch-R1-7B | 领域适配/优化 | 特定领域、新工具、中文数据 |
+
+## 在 autodl 上的完整流程
+
+```bash
+cd ~/autodl-tmp/MMSearch_Agent
+
+# 创建 setup.py（如果还没有）
+cat > setup.py << 'EOF'
+[之前的 setup.py 内容]
+EOF
+
+# 设置 HF 镜像
+export HF_ENDPOINT=https://hf-mirror.com
+
+# 运行安装脚本（会下载 Qwen2.5-VL-7B）
+bash scripts/setup_autodl.sh
+
+# 配置 API keys
+cp .env.example .env
+nano .env  # 填入 SERPAPI_KEY
+
+# 开始训练
+bash scripts/train.sh
+```
+
+现在你的项目是真正的**从零开始训练搜索能力**，而不是在已训练好的模型上微调。
+
+---
+
+_**User (2026-04-22 06:53:44Z)**_
+
+因为我主要就是想复现一下这个项目然后写在简历上找实习，你觉得我应该在这个项目的基础上继续优化吗，还是复现一下就好
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:54:11Z)**_
+
+给你几个建议，根据你的时间和目标选择：
+
+## 方案对比
+
+### **方案 1：只复现（1-2 周）**
+**做什么：**
+- 在 autodl 上跑通训练流程
+- 记录训练指标（loss、reward、准确率）
+- 测试推理效果
+
+**简历怎么写：**
+- "复现了 MMSearch-R1 多模态搜索项目"
+- 问题：HR/面试官会问"你的贡献是什么？"
+
+**适合：** 时间紧、只是想有个项目
+
+---
+
+### **方案 2：复现 + 小优化（2-3 周）⭐ 推荐**
+**做什么：**
+- 复现基础流程
+- 选 1-2 个点做改进：
+  1. **中文数据适配**：在中文 VQA 数据集上训练
+  2. **搜索策略优化**：调整奖励函数，减少不必要的搜索
+  3. **工具扩展**：添加新搜索源（百度、Bing）
+  4. **成本优化**：减少 API 调用次数，降低成本
+  5. **评估增强**：添加更多评估指标（搜索准确率、成本效益）
+
+**简历怎么写：**
+- "复现并优化了 MMSearch-R1，在 [具体点] 上提升了 X%"
+- 有对比实验、有数据支撑
+
+**适合：** 想找好实习、有 2-3 周时间
+
+---
+
+### **方案 3：深度改进（1 个月+）**
+**做什么：**
+- 换个应用场景（学术搜索、代码搜索）
+- 改进算法（尝试其他 RL 算法）
+- 发论文/博客
+
+**适合：** 时间充裕、想做研究
+
+---
+
+## 我的建议：方案 2
+
+**原因：**
+1. **面试友好**：有自己的思考和贡献，不是简单复现
+2. **时间合理**：2-3 周可以完成
+3. **可量化**：有对比数据，说服力强
+
+**具体建议（选一个做）：**
+
+### **最推荐：中文数据适配**
+- 找个中文 VQA 数据集（如 COCO-CN、AI Challenger）
+- 在中文数据上训练
+- 对比中英文效果
+- **亮点**：实用性强，国内公司喜欢
+
+### **次推荐：成本优化**
+- 分析哪些问题不需要搜索
+- 训练一个"搜索决策模块"
+- 减少 30%+ 的 API 调用
+- **亮点**：工程思维，展示成本意识
+
+---
+
+## 简历写法对比
+
+**只复现：**
+> 复现了 MMSearch-R1 多模态搜索项目，使用 GRPO 算法训练 Qwen2.5-VL 模型
+
+**复现+优化：**
+> 复现并优化了 MMSearch-R1 多模态搜索系统，针对中文场景进行适配，在中文 VQA 数据集上准确率提升 12%，同时通过搜索策略优化降低 API 调用成本 35%
+
+---
+
+**我的建议：先跑通复现（1 周），然后选一个小优化点做（1-2 周）。这样既有深度，时间也可控。**
+
+你倾向哪个方案？或者你的实习时间线是什么样的？
+
+---
+
+_**User (2026-04-22 06:57:12Z)**_
+
+分析哪些问题不需要搜索这个原项目的GRPO不就是有这个功能吗
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:57:33Z)**_
+
+你说得对！GRPO 训练**本身就包含了学习"何时搜索"的能力**。
+
+我说的"成本优化"其实是重复的。让我重新梳理：
+
+## 原项目已经做的
+
+**GRPO 训练目标：**
+```
+reward = answer_reward - 0.1 × 搜索次数 - 0.1 × 格式错误
+```
+
+这个奖励函数已经：
+- ✅ 惩罚不必要的搜索（每次搜索 -0.1）
+- ✅ 鼓励模型直接回答（如果能答对）
+- ✅ 学习何时需要搜索、何时不需要
+
+所以模型训练后**自然会学会判断是否需要搜索**。
+
+---
+
+## 真正可以做的优化点
+
+### **1. 中文数据适配** ⭐ 最推荐
+- 在中文 VQA 数据集上训练
+- 对比中英文效果
+- **创新点**：原项目只做了英文
+
+### **2. 搜索质量优化**
+- 不是"是否搜索"，而是"搜索什么"
+- 改进搜索 query 的生成质量
+- 例如：分析失败案例，发现搜索词不准确
+
+### **3. 多源搜索融合**
+- 原项目：Google（SerpAPI）
+- 优化：同时用百度、Bing，融合结果
+- **创新点**：多源信息更全面
+
+### **4. 搜索结果利用率**
+- 分析：搜索返回的信息有多少真正被用到
+- 优化：改进信息提取和摘要策略
+- **创新点**：提高搜索的有效性
+
+### **5. 领域迁移**
+- 原项目：通用 VQA
+- 优化：特定领域（医疗图像、商品识别）
+- **创新点**：垂直场景应用
+
+### **6. 评估体系增强**
+- 原项目：只看准确率
+- 优化：增加搜索准确率、信息利用率等指标
+- **创新点**：更全面的评估
+
+---
+
+## 我的新建议
+
+**如果时间紧（1-2 周）：**
+- 只复现 + 详细分析
+- 写一篇技术博客，深入分析 GRPO 如何学习搜索策略
+- 简历：展示理解深度
+
+**如果有时间（2-3 周）：**
+- **中文数据适配**（最实用）
+- 或 **搜索质量分析**（找出模型搜索失败的 case，分析原因）
+
+**简历写法（分析向）：**
+> 复现了 MMSearch-R1 项目，深入分析了 GRPO 算法如何通过奖励塑形学习搜索决策，发现模型在 [某类问题] 上搜索准确率较低，提出了 [改进方案]，准确率提升 X%
+
+---
+
+**所以你的问题很对，我之前说的"成本优化"确实是原项目已有的。真正的优化应该在搜索质量、多语言、领域适配这些方向。你觉得哪个方向更感兴趣？**
+
+---
+
+_**User (2026-04-22 06:58:43Z)**_
+
+原本的数据集是英文的吗
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:58:49Z)**_
+
+是的，原项目使用的 **FactualVQA 数据集是英文的**。
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:58:50Z)**_
+
+<tool-use data-tool-type="read" data-tool-name="Read"><details>
+<summary>Tool use: **Read**</summary>
+ `./data/factualvqa.py`
+
+```text
+1	"""
+2	FactualVQA dataset loading and reward computation for MMSearch-R1 training.
+3	
+4	Dataset: lmms-lab/FactualVQA
+5	Each example has:
+6	  - question: str
+7	  - image: PIL.Image (or image_url: str)
+8	  - answers: list[str]  (accepted answer strings)
+9	  - search_results: dict  (cached web search results — used during training rollout)
+10	
+11	Reward:
+12	  - Exact match (EM) or substring match (SubEM) on final <answer>: +1.0
+13	  - Per search tool call: -0.1 (search_penalty)
+14	  - Format violation (no <answer> tag): -0.1 (format_penalty)
+15	  - Final reward = answer_reward - search_penalty * num_searches - format_penalty
+16	"""
+17	
+18	import re
+19	import string
+20	from typing import Optional
+21	
+22	from datasets import load_dataset, Dataset
+23	
+24	
+25	# ─── Answer normalization ────────────────────────────────────────────────────
+26	
+27	def _normalize(text: str) -> str:
+28	    text = text.lower().strip()
+29	    text = text.translate(str.maketrans("", "", string.punctuation))
+30	    text = " ".join(text.split())
+31	    return text
+32	
+33	
+34	def exact_match(prediction: str, gold_answers: list[str]) -> bool:
+35	    pred = _normalize(prediction)
+36	    return any(_normalize(g) == pred for g in gold_answers)
+37	
+38	
+39	def substring_match(prediction: str, gold_answers: list[str]) -> bool:
+40	    pred = _normalize(prediction)
+41	    return any(_normalize(g) in pred or pred in _normalize(g) for g in gold_answers)
+42	
+43	
+44	# ─── Reward function ─────────────────────────────────────────────────────────
+45	
+46	_PAT_ANSWER = re.compile(r"<answer>(.*?)</answer>", re.DOTALL)
+47	_PAT_IMAGE_SEARCH = re.compile(r"<search>", re.DOTALL)
+48	_PAT_TEXT_SEARCH = re.compile(r"<text_search>", re.DOTALL)
+49	
+50	SEARCH_PENALTY = 0.1
+51	FORMAT_PENALTY = 0.1
+52	
+53	
+54	def compute_reward(
+55	    response: str,
+56	    gold_answers: list[str],
+57	    use_substring_match: bool = True,
+58	) -> dict:
+59	    """
+60	    Compute MMSearch-R1 reward for a single response.
+61	
+62	    Args:
+63	        response: Full model response (may contain tool calls + final answer).
+64	        gold_answers: List of acceptable answer strings.
+65	        use_substring_match: Fall back to SubEM if EM fails.
+66	
+67	    Returns:
+68	        {
+69	            "reward": float,
+70	            "answer_reward": float,
+71	            "search_penalty": float,
+72	            "format_penalty": float,
+73	            "predicted_answer": str,
+74	            "em": bool,
+75	            "subem": bool,
+76	        }
+77	    """
+78	    answer_match = _PAT_ANSWER.search(response)
+79	    format_penalty = 0.0 if answer_match else FORMAT_PENALTY
+80	
+81	    predicted = answer_match.group(1).strip() if answer_match else ""
+82	
+83	    em = exact_match(predicted, gold_answers)
+84	    subem = substring_match(predicted, gold_answers) if not em else True
+85	    answer_reward = 1.0 if (em or (use_substring_match and subem)) else 0.0
+86	
+87	    num_image_searches = len(_PAT_IMAGE_SEARCH.findall(response))
+88	    num_text_searches = len(_PAT_TEXT_SEARCH.findall(response))
+89	    total_searches = num_image_searches + num_text_searches
+90	    search_penalty = SEARCH_PENALTY * total_searches
+91	
+92	    reward = answer_reward - search_penalty - format_penalty
+93	
+94	    return {
+95	        "reward": reward,
+96	        "answer_reward": answer_reward,
+97	        "search_penalty": search_penalty,
+98	        "format_penalty": format_penalty,
+99	        "predicted_answer": predicted,
+100	        "em": em,
+101	        "subem": subem,
+102	    }
+103	
+104	
+105	# ─── Dataset loading ─────────────────────────────────────────────────────────
+106	
+107	def load_factualvqa(
+108	    split: str = "train",
+109	    cache_dir: Optional[str] = None,
+110	    max_samples: Optional[int] = None,
+111	) -> Dataset:
+112	    """
+113	    Load FactualVQA from HuggingFace.
+114	
+115	    Args:
+116	        split: "train" or "test"
+117	        cache_dir: Local cache path (set to /root/autodl-tmp/datasets on AutoDL)
+118	        max_samples: Truncate dataset for debugging
+119	
+120	    Returns:
+121	        HuggingFace Dataset with columns:
+122	          question, image, answers, [cached_search_results]
+123	    """
+124	    ds = load_dataset(
+125	        "lmms-lab/FactualVQA",
+126	        split=split,
+127	        cache_dir=cache_dir,
+128	    )
+129	    if max_samples is not None:
+130	        ds = ds.select(range(min(max_samples, len(ds))))
+131	    return ds
+132	
+133	
+134	def collate_batch(examples: list[dict]) -> dict:
+135	    """
+136	    Collate a list of FactualVQA examples into training batch format
+137	    expected by the veRL rollout engine.
+138	
+139	    Returns dict with:
+140	      - input_ids, attention_mask, pixel_values (model inputs)
+141	      - gold_answers (list of list of str, for reward computation)
+142	      - question_ids (for deduplication)
+143	    """
+144	    # veRL handles tokenization internally via the rollout worker;
+145	    # here we just organize the raw fields.
+146	    return {
+147	        "questions": [ex["question"] for ex in examples],
+148	        "images": [ex.get("image") for ex in examples],
+149	        "gold_answers": [ex["answers"] for ex in examples],
+150	        "cached_search_results": [ex.get("cached_search_results", {}) for ex in examples],
+151	    }
+152
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 06:59:07Z)**_
+
+确认了，**FactualVQA 是英文数据集**。
+
+从代码可以看到：
+- 数据集来源：`lmms-lab/FactualVQA`（Hugging Face）
+- 字段：`question`（英文问题）、`image`、`answers`（英文答案列表）
+
+## 所以"中文数据适配"确实是个好的优化方向
+
+**可以做的：**
+
+### **方案 A：翻译 FactualVQA**
+- 把英文问题和答案翻译成中文
+- 在中文数据上训练
+- 对比中英文效果
+- **优点**：数据现成，只需翻译
+- **缺点**：翻译质量影响效果
+
+### **方案 B：使用中文 VQA 数据集**
+找现成的中文数据集：
+- **COCO-CN**：COCO 的中文版
+- **AI Challenger**：中文图像描述数据集
+- **MUGE**：阿里的多模态数据集
+
+**优点**：原生中文，更自然
+**缺点**：需要转换数据格式
+
+### **方案 C：混合训练**
+- 英文 + 中文数据混合
+- 训练一个双语模型
+- **亮点**：跨语言能力
+
+---
+
+## 其他可行的优化方向
+
+既然中文适配需要找/处理数据集，如果想快速出成果，还可以考虑：
+
+### **1. 搜索质量分析** ⭐ 推荐（不需要额外数据）
+- 在测试集上跑推理
+- 分析哪些 case 搜索失败了
+- 分类失败原因（搜索词不准、信息提取失败等）
+- 提出改进方案并验证
+
+**简历写法：**
+> 对 MMSearch-R1 的搜索策略进行深度分析，发现 23% 的失败案例是由于搜索词过于宽泛，提出了基于实体识别的搜索词优化方法，准确率提升 8%
+
+### **2. 可视化分析工具**
+- 开发一个 Web 界面
+- 可视化搜索过程（每轮搜索了什么、找到了什么）
+- 对比不同策略的效果
+
+**简历写法：**
+> 开发了 MMSearch-R1 的可视化分析工具，帮助理解模型的搜索决策过程，发现并优化了 X 类问题的搜索策略
+
+---
+
+**我的建议：**
+1. **时间紧**：搜索质量分析（1-2 周，不需要额外数据）
+2. **有时间**：中文数据适配（2-3 周，需要处理数据）
+
+你更倾向哪个？或者你的时间线是怎样的？
+
+---
+
+_**User (2026-04-22 07:00:52Z)**_
+
+那如果我要做这些优化的话，我是从基础模型开始还是从他这个训练好的模型开始
+
+---
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 07:01:13Z)**_
+
+好问题！这取决于你要做什么优化：
+
+## 优化方向 vs 起点模型
+
+### **从 MMSearch-R1-7B 开始**（已训练好的）⭐ 推荐
+
+**适用场景：**
+1. **中文数据适配** - 继续训练，让它学会中文
+2. **搜索质量分析** - 直接用训练好的模型分析
+3. **可视化工具** - 用训练好的模型演示
+4. **领域迁移**（医疗、电商等）- 在特定领域数据上微调
+
+**优点：**
+- ✅ 已经会搜索了，只需适配新场景
+- ✅ 训练快（继续训练比从头训练快很多）
+- ✅ 可以直接对比"原模型 vs 优化后"
+
+**训练成本：**
+- 时间：几小时到 1-2 天
+- 数据：可以用较少数据（几千条）
+
+---
+
+### **从 Qwen2.5-VL-7B 开始**（基础模型）
+
+**适用场景：**
+1. **完整复现论文** - 证明你能从零训练
+2. **改进训练算法** - 修改 GRPO 算法本身
+3. **对比实验** - 对比不同训练策略
+
+**缺点：**
+- ❌ 训练时间长（3-4 天）
+- ❌ 需要完整数据集（几万条）
+- ❌ 成本高（GPU 时间）
+
+---
+
+## 针对你的情况
+
+### **如果做"搜索质量分析"**
+```
+用 MMSearch-R1-7B（训练好的）
+↓
+直接推理测试
+↓
+分析失败案例
+↓
+提出改进方案
+↓
+（可选）微调验证改进
+```
+
+**不需要从头训练！**
+
+---
+
+### **如果做"中文数据适配"**
+```
+用 MMSearch-R1-7B（训练好的）
+↓
+准备中文数据集
+↓
+继续训练（LoRA 微调）
+↓
+对比中英文效果
+```
+
+**也不需要从头训练！**
+
+---
+
+### **如果做"完整复现"**
+```
+用 Qwen2.5-VL-7B（基础模型）
+↓
+完整 GRPO 训练
+↓
+得到自己的 MMSearch 模型
+↓
+（可选）再做优化
+```
+
+**需要从头训练，但时间成本高**
+
+---
+
+## 我的建议
+
+**推荐方案：**
+1. **先用 MMSearch-R1-7B 做分析/优化**（1-2 周）
+   - 搜索质量分析
+   - 或中文数据微调
+   
+2. **（可选）再从 Qwen2.5-VL-7B 完整复现**（如果时间充裕）
+   - 证明你理解完整流程
+   - 但不是必须的
+
+**简历写法：**
+> 基于 MMSearch-R1 模型进行中文场景适配，在中文 VQA 数据集上进行 LoRA 微调，准确率提升 X%。深入分析了 GRPO 训练过程，理解了从 Qwen2.5-VL 到 MMSearch-R1 的完整训练流程。
+
+---
+
+## 修改你的项目配置
+
+如果决定用 MMSearch-R1-7B 做优化：
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 07:01:21Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/scripts/setup_autodl.sh has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 07:01:29Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Edit"><details>
+<summary>Tool use: **Edit**</summary>
+
+```text
+The file /Users/surely/Downloads/mmsearch-r1/train/configs/h20_lora.yaml has been updated successfully.
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 07:01:57Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Write"><details>
+<summary>Tool use: **Write**</summary>
+
+```yaml
+# Training from scratch using Qwen2.5-VL-7B base model
+# Use this config if you want to fully reproduce the original paper
+# Launch: python train/grpo_trainer.py --config train/configs/qwen_base.yaml
+
+model:
+  model_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
+  tokenizer_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
+  trust_remote_code: true
+
+  # LoRA — fits comfortably in ~55 GB, leaving room for KV cache + activations
+  use_lora: true
+  lora_rank: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+dataset:
+  train_files: lmms-lab/FactualVQA  # HF dataset id
+  cache_dir: /root/autodl-tmp/datasets/factualvqa
+  max_samples: null  # set e.g. 1000 for debugging
+
+trainer:
+  total_epochs: 3
+  project_name: mmsearch-r1-grpo
+  experiment_name: qwen-base-scratch
+  logger: ["console", "tensorboard"]
+  log_dir: /root/autodl-tmp/logs/mmsearch-r1
+
+  # GRPO / PPO settings
+  n_gpus_per_node: 1
+  nnodes: 1
+  train_batch_size: 64        # number of prompts per update step
+  ppo_mini_batch_size: 16     # micro-batch size for gradient accumulation
+  ppo_epochs: 1               # GRPO uses 1 epoch per rollout batch
+  kl_coef: 0.001              # KL regularization weight
+  clip_ratio: 0.2             # PPO clip epsilon
+  entropy_coef: 0.0
+
+  # Group-relative advantage: sample G responses per prompt
+  rollout_n: 8                # G = 8 responses per prompt
+  rollout_temperature: 0.9
+  rollout_top_p: 0.95
+
+  max_response_length: 2048
+  response_length_total: 8192  # max context including tools
+
+  # Gradient
+  learning_rate: 1.0e-5
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  warmup_steps: 20
+
+  save_freq: 200             # save checkpoint every N steps
+  save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1-scratch
+
+rollout:
+  rollout_backend: vllm
+  rollout_name: vllm_multiturn_mmsearch
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.5  # leave ~50% for training
+  enforce_eager: false
+
+  # Tool limits (per rollout episode)
+  image_search_limit: 1
+  text_search_limit: 2
+  max_gen_round: 3
+
+reward:
+  search_penalty: 0.1
+  format_penalty: 0.1
+  use_substring_match: true
+
+```
+
+```text
+File created successfully at: /Users/surely/Downloads/mmsearch-r1/train/configs/qwen_base.yaml
+```
+</details></tool-use>
+
+_**Agent (claude-sonnet-4-5-20250929 2026-04-22 07:02:20Z)**_
+
+<tool-use data-tool-type="write" data-tool-name="Write"><details>
+<summary>Tool use: **Write**</summary>
+
+```md
+# MMSearch_Agent
+
+基于 [EvolvingLMMs-Lab/multimodal-search-r1](https://github.com/EvolvingLMMs-Lab/multimodal-search-r1) 的多模态搜索项目复现与优化。
+
+## 项目说明
+
+本项目是对 MMSearch-R1 的复现，使用 GRPO（Group Relative Policy Optimization）训练多模态模型学习自主搜索策略。
+
+## 两种训练模式
+
+### 1. 继续训练（推荐用于优化）⭐
+基于已训练好的 MMSearch-R1-7B 进行微调，适合：
+- 中文数据适配
+- 领域迁移（医疗、电商等）
+- 搜索策略优化
+
+\```bash
+# 使用默认配置（MMSearch-R1-7B）
+bash scripts/train.sh train/configs/h20_lora.yaml
+\```
+
+### 2. 从头训练（完整复现）
+从 Qwen2.5-VL-7B 基础模型开始训练，完整复现论文：
+
+\```bash
+# 需要先下载 Qwen2.5-VL-7B（取消 setup_autodl.sh 中的注释）
+bash scripts/train.sh train/configs/qwen_base.yaml
+\```
+
+## 快速开始
+
+### 在 AutoDL 上部署
+
+\```bash
+# 1. 克隆项目
+cd ~/autodl-tmp
+git clone https://github.com/telanan/MMSearch_Agent.git
+cd MMSearch_Agent
+
+# 2. 创建 setup.py
+cat > setup.py << 'EOF'
+from setuptools import setup, find_packages
+
+setup(
+    name="mmsearch-agent",
+    version="0.1.0",
+    description="Multimodal Web Search with GRPO",
+    author="telanan",
+    packages=find_packages(),
+    python_requires=">=3.10",
+    install_requires=[
+        "torch>=2.3.0",
+        "torchvision",
+        "transformers>=4.46.0",
+        "accelerate>=0.33.0",
+        "peft>=0.12.0",
+        "vllm>=0.6.0",
+        "Pillow>=10.0.0",
+        "qwen-vl-utils",
+        "requests>=2.31.0",
+        "openai>=1.40.0",
+        "datasets>=2.20.0",
+        "huggingface_hub>=0.23.0",
+        "streamlit>=1.36.0",
+        "gradio>=4.40.0",
+        "numpy>=1.26.0",
+        "tqdm>=4.66.0",
+        "python-dotenv>=1.0.0",
+        "pydantic>=2.0.0",
+    ],
+)
+EOF
+
+# 3. 设置 HF 镜像
+export HF_ENDPOINT=https://hf-mirror.com
+
+# 4. 运行安装脚本
+bash scripts/setup_autodl.sh
+
+# 5. 配置 API keys
+cp .env.example .env
+nano .env  # 填入 SERPAPI_KEY
+
+# 6. 测试推理
+streamlit run app.py --server.port 6006
+
+# 7. 开始训练
+bash scripts/train.sh
+\```
+
+## 项目结构
+
+\```
+├── search_tools/          # 搜索工具（图像搜索、文本搜索）
+├── inference/             # 推理引擎
+├── data/                  # 数据集加载和奖励计算
+├── train/                 # GRPO 训练
+│   ├── configs/
+│   │   ├── h20_lora.yaml      # 继续训练配置（MMSearch-R1-7B）
+│   │   └── qwen_base.yaml     # 从头训练配置（Qwen2.5-VL-7B）
+├── scripts/               # 安装和训练脚本
+└── app.py                 # Streamlit 演示界面
+\```
+
+## 优化方向
+
+- [ ] 中文数据适配
+- [ ] 搜索质量分析
+- [ ] 多源搜索融合
+- [ ] 领域迁移应用
+- [ ] 可视化分析工具
+
+## 技术栈
+
+- **模型**: Qwen2.5-VL / MMSearch-R1-7B
+- **训练框架**: veRL (GRPO)
+- **推理加速**: vLLM
+- **搜索工具**: SerpAPI, JINA Reader
+- **数据集**: FactualVQA
+
+## 参考
+
+- 原项目: [EvolvingLMMs-Lab/multimodal-search-r1](https://github.com/EvolvingLMMs-Lab/multimodal-search-r1)
+- 模型: [lmms-lab/MMSearch-R1-7B](https://huggingface.co/lmms-lab/MMSearch-R1-7B)
+
+```
 </details></tool-use>

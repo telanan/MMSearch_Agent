@@ -27,27 +27,27 @@ fi
 echo "=== Installing project in editable mode ==="
 pip install -e "$PROJ_DIR" --root-user-action=ignore
 
-echo "=== Downloading base model (Qwen2.5-VL-7B) for training from scratch ==="
+echo "=== Downloading MMSearch-R1-7B (pre-trained model for fine-tuning) ==="
 python - <<'EOF'
 from huggingface_hub import snapshot_download
 snapshot_download(
-    repo_id="Qwen/Qwen2.5-VL-7B-Instruct",
-    local_dir="/root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct",
+    repo_id="lmms-lab/MMSearch-R1-7B",
+    local_dir="/root/autodl-tmp/models/MMSearch-R1-7B",
     ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],
 )
-print("Qwen2.5-VL-7B-Instruct downloaded.")
+print("MMSearch-R1-7B downloaded.")
 EOF
 
-echo "=== (Optional) Download MMSearch-R1-7B for comparison/inference ==="
-echo "Uncomment below to download the pre-trained MMSearch-R1-7B:"
+echo "=== (Optional) Download Qwen2.5-VL-7B for training from scratch ==="
+echo "Uncomment below if you want to train from scratch:"
 # python - <<'EOF'
 # from huggingface_hub import snapshot_download
 # snapshot_download(
-#     repo_id="lmms-lab/MMSearch-R1-7B",
-#     local_dir="/root/autodl-tmp/models/MMSearch-R1-7B",
+#     repo_id="Qwen/Qwen2.5-VL-7B-Instruct",
+#     local_dir="/root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct",
 #     ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],
 # )
-# print("MMSearch-R1-7B downloaded.")
+# print("Qwen2.5-VL-7B-Instruct downloaded.")
 # EOF
 
 echo "=== Downloading FactualVQA dataset ==="
