@@ -7,7 +7,9 @@ MODEL="${1:-/root/autodl-tmp/models/MMSearch-R1-7B}"
 NUM_SAMPLES="${2:-200}"
 
 if [ -f ".env" ]; then
-    export $(grep -v '^#' .env | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 python - <<EOF

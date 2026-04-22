@@ -8,7 +8,9 @@ PROJ_DIR="/root/autodl-tmp/MMSearch_Agent"
 
 # Load API keys
 if [ -f "$PROJ_DIR/.env" ]; then
-    export $(grep -v '^#' "$PROJ_DIR/.env" | xargs)
+    set -a
+    source "$PROJ_DIR/.env"
+    set +a
 fi
 
 echo "=== Starting MMSearch-R1 GRPO Training ==="

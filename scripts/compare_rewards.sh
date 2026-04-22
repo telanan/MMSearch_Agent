@@ -12,7 +12,9 @@ echo ""
 
 # Load API keys
 if [ -f "$PROJ_DIR/.env" ]; then
-    export $(grep -v '^#' "$PROJ_DIR/.env" | xargs)
+    set -a
+    source "$PROJ_DIR/.env"
+    set +a
 fi
 
 echo "1. Evaluating baseline model (MMSearch-R1-7B with original reward)..."
