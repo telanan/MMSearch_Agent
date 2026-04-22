@@ -22,7 +22,7 @@ model:
     - down_proj
 
 dataset:
-  train_files: lmms-lab/FactualVQA
+  train_files: lmms-lab/FVQA  # HF dataset id
   cache_dir: /root/autodl-tmp/datasets/factualvqa
   max_samples: null  # Use full dataset
 

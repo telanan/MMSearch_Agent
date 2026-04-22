@@ -56,8 +56,8 @@ echo "Uncomment below to download the original trained model for comparison:"
 echo "=== Downloading FactualVQA dataset ==="
 python - <<'EOF'
 from datasets import load_dataset
-ds = load_dataset("lmms-lab/FactualVQA", cache_dir="/root/autodl-tmp/datasets/factualvqa")
-print(f"FactualVQA: {ds}")
+ds = load_dataset("lmms-lab/FVQA", cache_dir="/root/autodl-tmp/datasets/factualvqa")
+print(f"FactualVQA (FVQA): {ds}")
 EOF
 
 echo ""

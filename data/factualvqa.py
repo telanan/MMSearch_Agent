@@ -1,7 +1,7 @@
 """
 FactualVQA dataset loading and reward computation for MMSearch-R1 training.
 
-Dataset: lmms-lab/FactualVQA
+Dataset: lmms-lab/FVQA
 Each example has:
   - question: str
   - image: PIL.Image (or image_url: str)
@@ -110,7 +110,7 @@ def load_factualvqa(
     max_samples: Optional[int] = None,
 ) -> Dataset:
     """
-    Load FactualVQA from HuggingFace.
+    Load FactualVQA (FVQA) from HuggingFace.
 
     Args:
         split: "train" or "test"
@@ -122,7 +122,7 @@ def load_factualvqa(
           question, image, answers, [cached_search_results]
     """
     ds = load_dataset(
-        "lmms-lab/FactualVQA",
+        "lmms-lab/FVQA",
         split=split,
         cache_dir=cache_dir,
     )
