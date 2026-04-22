@@ -1,10 +1,10 @@
-# MMSearch-R1 GRPO Training with Quality-Aware Reward
-# Fine-tuning MMSearch-R1-7B with improved reward function
+# MMSearch-R1 GRPO Training with Quality-Aware Reward FROM SCRATCH
+# Training Qwen2.5-VL-7B from base model with improved reward function
 # Launch: python train/grpo_trainer.py --config train/configs/quality_reward.yaml
 
 model:
-  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
-  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  model_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
+  tokenizer_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
   trust_remote_code: true
 
   # LoRA for efficient fine-tuning
@@ -27,9 +27,9 @@ dataset:
   max_samples: null  # Use full dataset
 
 trainer:
-  total_epochs: 2  # Shorter since we're fine-tuning
+  total_epochs: 3  # Full training from scratch
   project_name: mmsearch-r1-quality
-  experiment_name: quality-aware-reward
+  experiment_name: quality-reward-from-scratch
   logger: ["console", "tensorboard"]
   log_dir: /root/autodl-tmp/logs/mmsearch-r1-quality
 
@@ -52,10 +52,10 @@ trainer:
   response_length_total: 8192
 
   # Gradient
-  learning_rate: 5.0e-6  # Lower LR for fine-tuning
+  learning_rate: 1.0e-5  # Standard LR for from-scratch training
   weight_decay: 0.0
   max_grad_norm: 1.0
-  warmup_steps: 10
+  warmup_steps: 20
 
   save_freq: 200
   save_dir: /root/autodl-tmp/checkpoints/mmsearch-r1-quality
