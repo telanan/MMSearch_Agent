@@ -30,7 +30,6 @@ from typing import Optional
 try:
     from verl import DataProto
     from verl.trainer.ppo.ray_trainer import RayPPOTrainer
-    from verl.utils.reward_score import RewardManager
     _VERL_AVAILABLE = True
 except ImportError:
     _VERL_AVAILABLE = False
