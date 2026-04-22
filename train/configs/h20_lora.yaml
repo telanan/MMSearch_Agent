@@ -2,8 +2,8 @@
 # Launch: python train/grpo_trainer.py --config train/configs/h20_lora.yaml
 
 model:
-  model_path: /root/autodl-tmp/models/MMSearch-R1-7B
-  tokenizer_path: /root/autodl-tmp/models/MMSearch-R1-7B
+  model_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
+  tokenizer_path: /root/autodl-tmp/models/Qwen2.5-VL-7B-Instruct
   trust_remote_code: true
 
   # LoRA — fits comfortably in ~55 GB, leaving room for KV cache + activations
