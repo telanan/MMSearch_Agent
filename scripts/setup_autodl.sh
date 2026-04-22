@@ -12,20 +12,20 @@ echo "=== Creating directories ==="
 mkdir -p "$MODEL_DIR" "$DATASET_DIR/factualvqa" "$TMP_DIR/logs" "$TMP_DIR/checkpoints"
 
 echo "=== Installing Python dependencies ==="
-pip install -q --upgrade pip
-pip install -q torch torchvision --index-url https://download.pytorch.org/whl/cu124
-pip install -q transformers>=4.46.0 accelerate peft datasets huggingface_hub
-pip install -q vllm>=0.6.0
-pip install -q qwen-vl-utils Pillow requests openai
-pip install -q streamlit python-dotenv pydantic tqdm omegaconf
+pip install -q --upgrade pip --root-user-action=ignore
+pip install -q torch torchvision --index-url https://download.pytorch.org/whl/cu124 --root-user-action=ignore
+pip install -q transformers>=4.46.0 accelerate peft datasets huggingface_hub --root-user-action=ignore
+pip install -q vllm>=0.6.0 --root-user-action=ignore
+pip install -q qwen-vl-utils Pillow requests openai --root-user-action=ignore
+pip install -q streamlit python-dotenv pydantic tqdm omegaconf --root-user-action=ignore
 
 echo "=== Installing veRL ==="
 if ! python -c "import verl" 2>/dev/null; then
-    pip install -q verl
+    pip install -q verl --root-user-action=ignore
 fi
 
 echo "=== Installing project in editable mode ==="
-pip install -q -e "$PROJ_DIR"
+pip install -q -e "$PROJ_DIR" --root-user-action=ignore
 
 echo "=== Downloading MMSearch-R1-7B weights ==="
 python - <<'EOF'
